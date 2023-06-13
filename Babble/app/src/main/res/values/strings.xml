@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Babble</string>
+    <string name="btnLogin">Login</string>
+    <string name="pswHint">Password</string>
+    <string name="usrHint">Username</string>
+    <string name="loginMsg">Log into your account</string>
+    <string name="registerLink">Not Registered?</string>
+    <string name="registerMsg">Create a new account</string>
+    <string name="displayNameHint">Display Name</string>
+    <string name="newPswHint">New Password</string>
+    <string name="confirmNewPswInput">Confirm new Password</string>
+    <string name="registerBtn">Register</string>
+    <string name="loginLink">Already Registered?</string>
+    <string name="profilePicHint">Select Profile Picture</string>
+    <string name="photoPreview">proto preview</string>
+    <string name="addChat">add chat</string>
+    <string name="chatsTitle">Chats</string>
+    <string name="addContactHint">Enter contact\'s username</string>
+    <string name="addBtn">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="settingsTitle">Settings</string>
+    <string name="nameChangeHint">New display name</string>
+    <string name="picChangeDescrip">profilePicChange</string>
+    <string name="serverAddrHint">Set Server\'s address</string>
+    <string name="defaultAddress">http://localhost:5001</string>
+    <string name="themeHint">Theme (Light / Dark)</string>
+    <string name="save">Save</string>
+    <string name="serverAddrDescr">Server\'s address</string>
+    <string name="appearance">Appearance</string>
+    <string name="connection">Connection</string>
+    <string name="account">Account</string>
+    <string name="messages_view">messages view</string>
+    <string name="contacts_image">contact\'s image</string>
+    <string name="logoutBtn">Log Out</string>
+</resources>

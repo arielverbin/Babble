@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Babble" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#325A9F</item> <!-- Change the primary color -->
+        <item name="colorSecondary">#378A8A8A</item>
+    </style>
+
+    <style name="Theme.Babble" parent="Base.Theme.Babble" />
+</resources>
