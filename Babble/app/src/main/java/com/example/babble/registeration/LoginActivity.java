@@ -1,13 +1,13 @@
-package com.example.babble;
+package com.example.babble.registeration;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.babble.contacts.ContactsActivity;
 import com.example.babble.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {

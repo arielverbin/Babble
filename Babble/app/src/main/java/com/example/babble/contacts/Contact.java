@@ -1,4 +1,4 @@
-package com.example.babble;
+package com.example.babble.contacts;
 
 import android.graphics.Bitmap;
 import android.media.Image;

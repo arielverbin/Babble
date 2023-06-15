@@ -1,21 +1,18 @@
-package com.example.babble;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.babble.contacts;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.babble.chats.ChatActivity;
+import com.example.babble.R;
+import com.example.babble.SettingsActivity;
 import com.example.babble.databinding.ActivityContactsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

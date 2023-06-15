@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#1B1B1B</color>
+    <color name="trueBlack">#FF000000</color>
+    <color name="secondaryBlack">#B2000000</color>
+    <color name="primaryBlue">#325A9F</color>
+    <color name="primaryBrightBlue">#A3C0F1</color>
+    <color name="secondaryGrey">#378A8A8A</color>
+    <color name="secondaryBrightGrey">#408A8A8A</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="secondaryWhite">#B2FFFFFF</color>
     <color name="danger">#F44336</color>
+    <color name="darkerDanger">#C4291D</color>
+
+    <color name="fadedWhite">#eef1f6</color>
+    <color name="fadedBlack">#3E3E40</color>
+
+    <color name="darkTextBox">#101010</color>
+    <color name="brightTextBox">#E3E7E8</color>
+
+    <color name="sentMessageColor">#3F51B5</color>
 </resources>

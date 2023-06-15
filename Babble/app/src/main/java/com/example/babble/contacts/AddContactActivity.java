@@ -1,4 +1,4 @@
-package com.example.babble;
+package com.example.babble.contacts;
 
 import androidx.appcompat.app.AppCompatActivity;
 

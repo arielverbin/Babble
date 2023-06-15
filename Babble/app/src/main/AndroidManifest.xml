@@ -16,19 +16,19 @@
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".AddContactActivity"
+            android:name=".contacts.AddContactActivity"
             android:exported="false" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".chats.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".ContactsActivity"
+            android:name=".contacts.ContactsActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".registeration.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".registeration.RegisterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

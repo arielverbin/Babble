@@ -1,4 +1,4 @@
-package com.example.babble;
+package com.example.babble.registeration;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.babble.contacts.ContactsActivity;
 import com.example.babble.databinding.ActivityRegisterBinding;
 
 public class RegisterActivity extends AppCompatActivity {

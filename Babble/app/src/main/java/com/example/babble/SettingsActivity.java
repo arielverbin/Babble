@@ -1,13 +1,16 @@
 package com.example.babble;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageButton;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.babble.databinding.ActivitySettingsBinding;
+import com.example.babble.registeration.LoginActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -29,6 +32,21 @@ public class SettingsActivity extends AppCompatActivity {
             Intent i = new Intent(SettingsActivity.this, LoginActivity.class);
             startActivity(i);
         });
+
+
+        SwitchCompat themeSwitch = binding.themeSwitch;
+        themeSwitch.setChecked(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES);
+        themeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+            }
+        });
+
     }
 
     @Override

@@ -32,4 +32,14 @@
     <string name="messages_view">messages view</string>
     <string name="contacts_image">contact\'s image</string>
     <string name="logoutBtn">Log Out</string>
+    <string name="deleteContact">Delete Contact</string>
+
+
+    <string name="MessageBox">MessageBox</string>
+    <string name="Send">Send</string>
+    <string name="backtocontactslist">backToContactsList</string>
+    <string name="name_of_user">Name of User</string>
+    <string name="enter_message">Enter Message...</string>
+    <string name="sendbtn">sendBTN</string>
+    <string name="no_previous_messages">No Previous Messages.</string>
 </resources>
