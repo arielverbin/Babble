@@ -19,14 +19,21 @@ public class SettingsActivity extends AppCompatActivity {
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-        ImageButton cancel = binding.cancel;
-        cancel.setOnClickListener(view -> finish());
+        // Set actionbar title.
+        setTitle("Settings");
+        if(getSupportActionBar() != null)   //null check
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView logOutBtn = binding.logOutBtn;
         logOutBtn.setOnClickListener(view -> {
             Intent i = new Intent(SettingsActivity.this, LoginActivity.class);
             startActivity(i);
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }

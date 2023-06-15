@@ -10,6 +10,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+
 
 import com.example.babble.databinding.ActivityContactsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +35,9 @@ public class ContactsActivity extends AppCompatActivity {
 
         ListView contactsView = binding.contactList;
 
+        // Set actionbar title.
+        setTitle("Chats");
+
         contactList = generateContacts();
         final ContactsAdapter feedAdapter = new ContactsAdapter(contactList);
         contactsView.setAdapter(feedAdapter);
@@ -42,12 +50,6 @@ public class ContactsActivity extends AppCompatActivity {
         FloatingActionButton addContact = binding.addContactBtn;
         addContact.setOnClickListener(view -> {
             Intent i = new Intent(ContactsActivity.this, AddContactActivity.class);
-            startActivity(i);
-        });
-
-        ImageButton settings = binding.settings;
-        settings.setOnClickListener(view -> {
-            Intent i = new Intent(ContactsActivity.this, SettingsActivity.class);
             startActivity(i);
         });
     }
@@ -69,4 +71,24 @@ public class ContactsActivity extends AppCompatActivity {
 
         return contacts;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu XML file
+        getMenuInflater().inflate(R.menu.chats_actionbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle menu item selection
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_settings) {
+            Intent i = new Intent(ContactsActivity.this, SettingsActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

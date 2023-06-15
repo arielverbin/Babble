@@ -22,6 +22,10 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(binding.getRoot());
 
+        // Disable the action bar.
+        if(getSupportActionBar() != null)
+            getSupportActionBar().hide();
+
         loginButton = binding.btnLogin;
         loginButton.setOnClickListener(v -> {
             // Handle login button click event

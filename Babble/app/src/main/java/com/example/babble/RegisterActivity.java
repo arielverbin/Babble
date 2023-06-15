@@ -20,6 +20,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         setContentView(binding.getRoot());
 
+        // Disable the actionbar.
+        if(getSupportActionBar() != null)
+            getSupportActionBar().hide();
+
         TextView loginLink = binding.loginLink;
 
         loginLink.setOnClickListener(v -> {

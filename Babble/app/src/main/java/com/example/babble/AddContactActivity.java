@@ -19,7 +19,16 @@ public class AddContactActivity extends AppCompatActivity {
         binding = ActivityAddContactBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ImageButton cancelBtn = binding.cancelAdd;
-        cancelBtn.setOnClickListener(view -> finish());
+        // Set actionbar title.
+        setTitle("Add Contact");
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }
