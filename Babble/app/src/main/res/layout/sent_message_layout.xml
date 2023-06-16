@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
         app:cardBackgroundColor="@color/sentMessageColor"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
@@ -46,11 +46,11 @@
                 android:id="@+id/text_gchat_timestamp_me"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginBottom="8dp"
                 android:text="@{message.timestamp}"
                 android:textColor="#C0C0C0"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="@+id/card_gchat_message_me"
                 app:layout_constraintEnd_toStartOf="@+id/card_gchat_message_me" />
         </LinearLayout>

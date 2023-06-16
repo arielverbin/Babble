@@ -1,21 +1,33 @@
 package com.example.babble.contacts;
 
-import android.graphics.Bitmap;
-import android.media.Image;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity
 public class Contact {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String username;
     private String displayName;
-    private Bitmap profilePicture;
+    private String profilePicturePath;
     private String lastMessage;
     private String timeChatted;
 
-    public Contact(String username, String displayName, Bitmap profilePicture, String lastMessage, String timeChatted) {
+    public Contact(String username, String displayName, String profilePicturePath, String lastMessage, String timeChatted) {
         this.username = username;
         this.displayName = displayName;
-        this.profilePicture = profilePicture;
+        this.profilePicturePath = profilePicturePath;
         this.lastMessage = lastMessage;
         this.timeChatted = timeChatted;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -34,12 +46,12 @@ public class Contact {
         this.displayName = displayName;
     }
 
-    public Bitmap getProfilePicture() {
-        return profilePicture;
+    public String getProfilePicturePath() {
+        return profilePicturePath;
     }
 
-    public void setProfilePicture(Bitmap profilePicture) {
-        this.profilePicture = profilePicture;
+    public void setProfilePicturePath(String profilePicturePath) {
+        this.profilePicturePath = profilePicturePath;
     }
 
     public String getLastMessage() {

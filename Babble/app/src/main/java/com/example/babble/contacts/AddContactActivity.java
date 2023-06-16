@@ -1,16 +1,19 @@
 package com.example.babble.contacts;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
+import com.example.babble.AppDB;
 import com.example.babble.databinding.ActivityAddContactBinding;
 
 public class AddContactActivity extends AppCompatActivity {
 
-    ActivityAddContactBinding binding;
+    private AppDB db;
+    private ContactDao contactDao;
+
+    private ActivityAddContactBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +24,30 @@ public class AddContactActivity extends AppCompatActivity {
 
         // Set actionbar title.
         setTitle("Add Contact");
-        if(getSupportActionBar() != null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        db = Room.databaseBuilder(getApplicationContext(), AppDB.class, "AppDB")
+                .allowMainThreadQueries().build();
+
+        contactDao = db.contactDao();
+        handleSave();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+    private void handleSave() {
+        binding.addBtn.setOnClickListener(view -> {
+            String username = binding.newContactInput.getText().toString();
+            Contact contact = new Contact(username, username, null, "This conversation is new.", "12:23");
+
+            contactDao.insert(contact);
+
+            finish();
+        });
     }
 }
