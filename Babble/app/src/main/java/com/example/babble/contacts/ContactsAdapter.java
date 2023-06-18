@@ -13,9 +13,9 @@ import java.util.List;
 
 public class ContactsAdapter extends BaseAdapter {
 
-    private List<Contact> contacts;
+    private final List<Contact> contacts;
 
-    private class ViewHolder {
+    private static class ViewHolder {
         TextView nameTextView;
         TextView lastMessageTextView;
         TextView timeChattedTextView;
@@ -60,7 +60,7 @@ public class ContactsAdapter extends BaseAdapter {
         }
 
         Contact contact = contacts.get(position);
-        String name = contact.getDisplayName() + " id=" +contact.getId();
+        String name = contact.getDisplayName();
         viewHolder.nameTextView.setText(name);
         viewHolder.lastMessageTextView.setText(contact.getLastMessage());
         viewHolder.timeChattedTextView.setText(contact.getTimeChatted());
@@ -68,4 +68,5 @@ public class ContactsAdapter extends BaseAdapter {
 
         return convertView;
     }
+
 }

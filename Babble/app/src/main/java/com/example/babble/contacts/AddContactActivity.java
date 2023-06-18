@@ -43,7 +43,7 @@ public class AddContactActivity extends AppCompatActivity {
     private void handleSave() {
         binding.addBtn.setOnClickListener(view -> {
             String username = binding.newContactInput.getText().toString();
-            Contact contact = new Contact(username, username, null, "This conversation is new.", "12:23");
+            Contact contact = new Contact(username, username, null, "This conversation is new.", "");
 
             contactDao.insert(contact);
 

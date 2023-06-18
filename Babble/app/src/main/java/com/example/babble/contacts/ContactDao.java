@@ -24,4 +24,11 @@ public interface ContactDao {
 
     @Delete
     void delete(Contact contact);
+
+    @Query("DELETE FROM contact WHERE id = :id")
+    void deleteById(int id);
+
+    @Query("UPDATE contact SET lastMessage = :content, timeChatted = :timeSent WHERE id = :contactID")
+    void setLastMessage(int contactID, String content, String timeSent);
+
 }
