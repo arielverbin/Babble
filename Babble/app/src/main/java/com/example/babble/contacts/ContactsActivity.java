@@ -1,28 +1,33 @@
 package com.example.babble.contacts;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
-import com.example.babble.chats.ChatActivity;
+import com.example.babble.AppDB;
 import com.example.babble.R;
 import com.example.babble.SettingsActivity;
+import com.example.babble.chats.ChatActivity;
 import com.example.babble.databinding.ActivityContactsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    List<Contact> contactList;
     private ActivityContactsBinding binding;
+    private ListView contactsListView;
+    private ContactsAdapter contactsAdapter;
+
+    private AppDB db;
+    private ContactDao contactDao;
+    private List<Contact> contactList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,62 +35,60 @@ public class ContactsActivity extends AppCompatActivity {
         binding = ActivityContactsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ListView contactsView = binding.contactList;
+        contactsListView = binding.contactList;
 
         // Set actionbar title.
         setTitle("Chats");
 
-        contactList = generateContacts();
-        final ContactsAdapter feedAdapter = new ContactsAdapter(contactList);
-        contactsView.setAdapter(feedAdapter);
-        contactsView.setOnItemClickListener((parent, view, position, id) -> {
-            // Contact selectedContact = contactList.get(position);
-            Intent i = new Intent(ContactsActivity.this, ChatActivity.class);
-            startActivity(i);
+        db = Room.databaseBuilder(getApplicationContext(), AppDB.class, "AppDB")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+        contactDao = db.contactDao();
+        contactList = contactDao.index();
+
+        contactsAdapter = new ContactsAdapter(contactList);
+        contactsListView.setAdapter(contactsAdapter);
+        contactsListView.setOnItemClickListener((parent, view, position, id) -> {
+            Contact selectedContact = contactList.get(position);
+            Intent intent = new Intent(ContactsActivity.this, ChatActivity.class);
+            intent.putExtra("chatId", "" + selectedContact.getId());
+            startActivity(intent);
         });
 
-        FloatingActionButton addContact = binding.addContactBtn;
-        addContact.setOnClickListener(view -> {
-            Intent i = new Intent(ContactsActivity.this, AddContactActivity.class);
-            startActivity(i);
+        FloatingActionButton addContactButton = binding.addContactBtn;
+        addContactButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ContactsActivity.this, AddContactActivity.class);
+            startActivity(intent);
         });
-    }
-
-    private List<Contact> generateContacts() {
-        List<Contact> contacts = new ArrayList<>();
-        Bitmap examplePic = BitmapFactory.decodeResource(getResources(), R.drawable.walter);
-
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-        contacts.add(new Contact("ross", "Ross Geller", examplePic, "We were on a break!", "Yesterday"));
-
-        return contacts;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu XML file
         getMenuInflater().inflate(R.menu.chats_actionbar, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle menu item selection
         int itemId = item.getItemId();
         if (itemId == R.id.action_settings) {
-            Intent i = new Intent(ContactsActivity.this, SettingsActivity.class);
-            startActivity(i);
+            Intent intent = new Intent(ContactsActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshContactList();
+    }
+
+    private void refreshContactList() {
+        contactList.clear();
+        contactList.addAll(contactDao.index());
+        contactsAdapter.notifyDataSetChanged();
+    }
 }

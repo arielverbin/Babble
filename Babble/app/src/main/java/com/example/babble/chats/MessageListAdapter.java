@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.babble.R;
-import com.example.babble.chats.Message;
 
 import java.util.ArrayList;
 import java.util.List;

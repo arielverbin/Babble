@@ -42,4 +42,6 @@
     <string name="enter_message">Enter Message...</string>
     <string name="sendbtn">sendBTN</string>
     <string name="no_previous_messages">No Previous Messages.</string>
+    <string name="noMessages">Looks like there aren\'t any messages yet.</string>
+    <string name="BaseUrl">http://10.0.2.2:5001/api/</string>
 </resources>
