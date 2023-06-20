@@ -99,6 +99,17 @@
                 android:minHeight="48dp"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/errors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ems="10"
+                android:minHeight="48dp"
+                android:textSize="17sp"
+                android:textColor="#FF0000"
+                android:gravity="center" />
+
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"

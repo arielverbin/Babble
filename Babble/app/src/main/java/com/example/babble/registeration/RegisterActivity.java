@@ -26,7 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements PostCallback {
     private String base64Image;
     private ActivityRegisterBinding binding;
     private static final int PICK_IMAGE = 1;
@@ -105,14 +105,23 @@ public class RegisterActivity extends AppCompatActivity {
                                     passwordText, this.base64Image);
                 UserAPI userAPI = new UserAPI();
 
-                userAPI.post(user, RegisterActivity.this);
+                userAPI.post(user, RegisterActivity.this, this);
 
             }
 
         });
+    }
 
+    @Override
+    public void onPostFail() {
+//        binding = ActivityRegisterBinding.inflate(getLayoutInflater());
+//        setContentView(binding.getRoot());
+        TextView errors = binding.errors;
+
+        errors.setText("Username already exists");
 
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
