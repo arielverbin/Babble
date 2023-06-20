@@ -1,4 +1,5 @@
 package com.example.babble.chats;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.babble.R;
+import com.example.babble.contacts.Contact;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.MessageViewHolder> {
     private final List<Message> messageList;
     private final LayoutInflater inflater;
 
-    public MessageListAdapter(Context context, List<Message> messages) {
-        messageList = messages;
+    public MessageListAdapter(Context context) {
+        messageList = new LinkedList<>();
         inflater = LayoutInflater.from(context);
     }
 
@@ -27,7 +30,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         View itemView;
         if (viewType == 0) {
             itemView = inflater.inflate(R.layout.recieved_message_layout, parent, false);
-        } else if(viewType == 1){
+        } else if (viewType == 1) {
             itemView = inflater.inflate(R.layout.sent_message_layout, parent, false);
         } else {
             itemView = inflater.inflate(R.layout.water_mark_layout, parent, false);
@@ -49,7 +52,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     @Override
     public int getItemViewType(int position) {
         Message message = messageList.get(position);
-        if(message.isWatermark()) {
+        if (message.isWatermark()) {
             return 2;
         }
         return message.isSent() ? 1 : 0;
@@ -59,7 +62,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         messageList.add(message);
         notifyItemInserted(messageList.size() - 1);
 
-        if(getItemCount() == 2) {
+        if (getItemCount() == 2) {
             messageList.get(0).setContent("No previous messages.");
             notifyItemChanged(0);
         }
@@ -77,7 +80,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
                 waterMarkTextView = itemView.findViewById(R.id.waterMark);
                 messageTextView = null;
                 timestampTextView = null;
-            } else if(viewType == 1) {
+            } else if (viewType == 1) {
                 waterMarkTextView = null;
                 messageTextView = itemView.findViewById(R.id.messageTextView);
                 timestampTextView = itemView.findViewById(R.id.text_gchat_timestamp_me);
@@ -97,6 +100,17 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
             timestampTextView.setText(message.getTimeSent());
 
         }
+    }
+
+    public void insertLastMessage(Message message) {
+        messageList.add(message);
+        notifyItemInserted(messageList.size() - 1);
+    }
+
+    public void setMessages(List<Message> messages) {
+        messageList.clear();
+        messageList.addAll(messages);
+        notifyDataSetChanged();
     }
 
 }

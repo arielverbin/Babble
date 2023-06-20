@@ -12,6 +12,8 @@
     <color name="danger">#F44336</color>
     <color name="darkerDanger">#C4291D</color>
 
+    <color name="fadedDanger">#25DF3B3B</color>
+
     <color name="fadedWhite">#eef1f6</color>
     <color name="fadedBlack">#3E3E40</color>
 

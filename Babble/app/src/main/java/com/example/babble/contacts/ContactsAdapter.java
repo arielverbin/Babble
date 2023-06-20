@@ -1,5 +1,6 @@
 package com.example.babble.contacts;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.babble.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsAdapter extends BaseAdapter {
@@ -22,13 +24,21 @@ public class ContactsAdapter extends BaseAdapter {
         ImageView profileImageView;
     }
 
-    public ContactsAdapter(List<Contact> contacts) {
-        this.contacts = contacts;
+    public ContactsAdapter() {
+        this.contacts = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
         return contacts.size();
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts.clear();
+        if (contacts != null) {
+            this.contacts.addAll(contacts);
+        }
+        notifyDataSetChanged();
     }
 
     @Override

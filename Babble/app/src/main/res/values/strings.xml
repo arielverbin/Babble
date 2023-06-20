@@ -43,4 +43,5 @@
     <string name="sendbtn">sendBTN</string>
     <string name="no_previous_messages">No Previous Messages.</string>
     <string name="noMessages">Looks like there aren\'t any messages yet.</string>
+    <string name="username_already_exists">This username already exists in your contacts.</string>
 </resources>

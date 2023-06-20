@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import com.example.babble.AppDB;
@@ -17,6 +19,7 @@ import com.example.babble.chats.ChatActivity;
 import com.example.babble.databinding.ActivityContactsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
@@ -25,9 +28,7 @@ public class ContactsActivity extends AppCompatActivity {
     private ListView contactsListView;
     private ContactsAdapter contactsAdapter;
 
-    private AppDB db;
-    private ContactDao contactDao;
-    private List<Contact> contactList;
+    private ContactsViewModel contactsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,27 +36,31 @@ public class ContactsActivity extends AppCompatActivity {
         binding = ActivityContactsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        contactsListView = binding.contactList;
-
         // Set actionbar title.
         setTitle("Chats");
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDB.class, "AppDB")
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build();
-        contactDao = db.contactDao();
-        contactList = contactDao.index();
+        // initialize view model
+        contactsViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
 
-        contactsAdapter = new ContactsAdapter(contactList);
+        // create a new adapter for the contact list.
+        contactsAdapter = new ContactsAdapter();
+        contactsListView = binding.contactList;
         contactsListView.setAdapter(contactsAdapter);
+
+        // observe for initial creation - fetch all contacts.
+        contactsViewModel.getAllContacts().observe(this, contacts -> {
+            contactsAdapter.setContacts(contacts);
+        });
+
+        // clicking a contact starts the ChatActivity, given the current charId.
         contactsListView.setOnItemClickListener((parent, view, position, id) -> {
-            Contact selectedContact = contactList.get(position);
+            Contact selectedContact = (Contact) contactsAdapter.getItem(position);
             Intent intent = new Intent(ContactsActivity.this, ChatActivity.class);
             intent.putExtra("chatId", "" + selectedContact.getId());
             startActivity(intent);
         });
 
+        // clicking the floating action button start the AddContactActivity.
         FloatingActionButton addContactButton = binding.addContactBtn;
         addContactButton.setOnClickListener(view -> {
             Intent intent = new Intent(ContactsActivity.this, AddContactActivity.class);
@@ -83,12 +88,8 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        refreshContactList();
+        // observe for resuming the activity (after exit from ChatActivity).
+        contactsViewModel.getAllContacts().observe(this, contacts -> contactsAdapter.setContacts(contacts));
     }
 
-    private void refreshContactList() {
-        contactList.clear();
-        contactList.addAll(contactDao.index());
-        contactsAdapter.notifyDataSetChanged();
-    }
 }
