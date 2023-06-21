@@ -37,12 +37,6 @@ public class UserAPI {
     WebServiceAPI webServiceAPI;
 
     public UserAPI() {
-
-//        retrofit = new Retrofit.Builder()
-//                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//        webServiceAPI = retrofit.create(WebServiceAPI.class);
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
