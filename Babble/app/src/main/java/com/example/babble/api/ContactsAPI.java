@@ -1,8 +1,6 @@
 package com.example.babble.api;
-
 import android.content.Context;
 import android.widget.Toast;
-
 import com.example.babble.MyApplication;
 import com.example.babble.R;
 import com.example.babble.contacts.Contact;
@@ -11,12 +9,10 @@ import com.example.babble.contacts.ContactFromServer;
 import com.example.babble.registeration.PostCallback;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -95,6 +91,26 @@ public class ContactsAPI {
 
             @Override
             public void onFailure(Call<ContactAfterAdd> call, Throwable t) {
+                Toast.makeText(context, "Failed: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void deleteContact(Context context, PostCallback callback, int id){
+        Call<Void> call = webServiceAPI.deleteContact(id,
+                "application/json",
+                "Bearer " + MyApplication.token);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call,
+                                   Response<Void> response) {
+                if (response.code() == 200) {
+                    //callback.onSuccess();
+                }
+            }
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, "Failed: " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
             }

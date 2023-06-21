@@ -1,24 +1,15 @@
 package com.example.babble.api;
-
 import android.content.Context;
 import android.widget.Toast;
-
 import com.example.babble.MyApplication;
 import com.example.babble.R;
 import com.example.babble.chats.Message;
 import com.example.babble.chats.MessageFromServer;
-import com.example.babble.contacts.Contact;
-import com.example.babble.contacts.ContactAfterAdd;
-import com.example.babble.contacts.ContactFromServer;
 import com.example.babble.registeration.PostCallback;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,10 +33,12 @@ public class ChatAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
-    public void getMessages(Context context, PostCallback callback, int id, String username) {
+    public void getMessages(Context context, PostCallback callback, int id,
+                            String username, String content) {
         Call<List<MessageFromServer>> call = webServiceAPI.getMessages(id,
                 "application/json",
-                "Bearer " + MyApplication.token);
+                "Bearer " + MyApplication.token,
+                content);
         call.enqueue(new Callback<List<MessageFromServer>>() {
             @Override
             public void onResponse(Call<List<MessageFromServer>> call,
@@ -56,7 +49,7 @@ public class ChatAPI {
                     List<Message> chatMessages = new ArrayList<>();
 
                     for (MessageFromServer message : serverListMessages) {
-                        com.example.babble.chats.Message chatMessage = new com.example.babble.chats.Message(
+                        Message chatMessage = new com.example.babble.chats.Message(
                                 message.getContent(),
                                 message.getId(),
                                 message.isSent(username)
