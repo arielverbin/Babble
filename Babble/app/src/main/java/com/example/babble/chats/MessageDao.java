@@ -3,6 +3,7 @@ package com.example.babble.chats;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -14,12 +15,12 @@ public interface MessageDao {
     List<Message> index();
 
     @Query("SELECT * FROM message WHERE id = :id")
-    Message get(int id);
+    Message get(String id);
 
     @Query("SELECT * FROM message WHERE chatId = :chatId")
-    List<Message> getChat(int chatId);
+    List<Message> getChat(String chatId);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Message message);
 
     @Update
@@ -27,4 +28,10 @@ public interface MessageDao {
 
     @Delete
     void delete(Message message);
+
+    @Query("DELETE FROM message WHERE chatId = :chatId")
+    void clearChat(String chatId);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<Message> messages);
 }

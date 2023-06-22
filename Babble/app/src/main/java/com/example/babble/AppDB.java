@@ -9,7 +9,7 @@ import com.example.babble.chats.MessageDao;
 import com.example.babble.contacts.Contact;
 import com.example.babble.contacts.ContactDao;
 
-@Database(entities = {Contact.class, Message.class}, version = 5)
+@Database(entities = {Contact.class, Message.class}, version = 11)
 public abstract class AppDB extends RoomDatabase {
     public abstract ContactDao contactDao();
     public abstract MessageDao messageDao();

@@ -1,15 +1,15 @@
 package com.example.babble.registeration;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,20 +17,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.example.babble.R;
-import com.example.babble.api.UserAPI;
+import com.example.babble.API.UserAPI;
 import com.example.babble.contacts.ContactsActivity;
 import com.example.babble.databinding.ActivityRegisterBinding;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-public class RegisterActivity extends AppCompatActivity implements PostCallback {
+public class RegisterActivity extends AppCompatActivity {
     private String base64Image;
     private ActivityRegisterBinding binding;
     private static final int PICK_IMAGE = 1;
-
 
 
     @Override
@@ -41,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity implements PostCallback 
         setContentView(binding.getRoot());
 
         // Disable the actionbar.
-        if(getSupportActionBar() != null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().hide();
 
         TextView loginLink = binding.loginLink;
@@ -64,65 +58,44 @@ public class RegisterActivity extends AppCompatActivity implements PostCallback 
         loginBtn.setOnClickListener(v -> {
             TextView errors = binding.errors;
 
-            //need to check that this username does not already exist
-            EditText username = binding.usernameInput;
-            EditText displayName = binding.nameInput;
-            ImageView photoPreview = binding.photoPreview;// Replace with your ImageView's ID
+            String username = binding.usernameInput.getText().toString();
+            String displayName = binding.nameInput.getText().toString();
+            String password = binding.passwordInput.getText().toString();
+            String confirmPassword = binding.confirmPasswordInput.getText().toString();
+            Drawable photoPreview = binding.photoPreview.getDrawable();
 
-            //need to implement the photo too
-            //Button pic = binding.selectPhotoButton;
+            String errorMsg = produceErrorMsg(displayName, username,
+                    password, confirmPassword,photoPreview);
 
-            EditText password = binding.passwordInput;
-            String passwordText = password.getText().toString();
-
-            boolean containsDigit = passwordText.matches(".*\\d.*");
-            boolean containsUppercase = !passwordText.equals(passwordText.toLowerCase());
-            boolean containsSpaces = passwordText.contains(" ");
-
-
-            EditText confirmPassword = binding.confirmPasswordInput;
-            String confirmPasswordText = confirmPassword.getText().toString();
-//            if (username.getText().toString().equals("") || displayName.getText().toString().equals("")
-//                    || passwordText.equals("") || confirmPasswordText.equals("") ||
-//                    photoPreview == null || photoPreview.getDrawable() == null) {
-//                errors.setText("All fields are required");
-//            }
-//            else if (passwordText.length() < 8) {
-                         if (passwordText.length() < 8) {
-
-                errors.setText("Password must be at least 8 characters long");
-//            } else if (!containsDigit) {
-//                errors.setText("Password must contain at least one digit");
-//            } else if (!containsUppercase) {
-//                errors.setText("Password must contain at least one uppercase letter");
-//            } else if (containsSpaces) {
-//                errors.setText("Password must not contain spaces");
-//            } else if (!passwordText.equals(confirmPasswordText)) {
-//                errors.setText("Passwords do not match");
-            } else{
-                errors.setText("");
-                User user = new User(username.getText().toString(), displayName.getText().toString(),
-                                    passwordText, this.base64Image);
+            if (!errorMsg.isEmpty()) {
+                CardView errorCard = binding.errorCard;
+                errorCard.setVisibility(View.VISIBLE);
+                errors.setText(errorMsg);
+            } else {
+                User user = new User(username, displayName,
+                        password, this.base64Image);
                 UserAPI userAPI = new UserAPI();
+                userAPI.post(user, RegisterActivity.this, new RequestCallBack() {
 
-                userAPI.post(user, RegisterActivity.this, this);
+                    // fail signing up - display error message.
+                    @Override
+                    public void onFailure(String error) {
+                        TextView errors = binding.errors;
+                        CardView errorCard = binding.errorCard;
+                        errorCard.setVisibility(View.VISIBLE);
+                        errors.setText(error);
+                    }
 
+                    // success! starting the contacts activity.
+                    @Override
+                    public void onSuccess() {
+                        Intent intent = new Intent(RegisterActivity.this, ContactsActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
-
         });
     }
-
-    @Override
-    public void onPostFail() {
-//        binding = ActivityRegisterBinding.inflate(getLayoutInflater());
-//        setContentView(binding.getRoot());
-        TextView errors = binding.errors;
-
-        errors.setText("Username already exists");
-
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -135,13 +108,25 @@ public class RegisterActivity extends AppCompatActivity implements PostCallback 
         }
     }
 
-//    private void saveAndDisplayImage(Uri photoUri) {
-//        // Save the photoUri to a location or perform any necessary operations
-//
-//        // Display the photo in an ImageView
-//        ImageView photoPreview = binding.photoPreview;// Replace with your ImageView's ID
-//        photoPreview.setImageURI(photoUri);
-//    }
+    private String produceErrorMsg(String displayName, String username, String password,
+                                   String confirmPassword, Drawable pic) {
+        if (username.isEmpty() || displayName.isEmpty() || password.isEmpty() ||
+                confirmPassword.isEmpty() || pic == null) {
+            return "All fields are required";
+        } else if (password.length() < 8) {
+            return "Password must be at least 8 characters long";
+        } else if (!password.matches(".*\\d.*")) {
+            return "Password must contain at least one digit";
+        } else if (password.equals(password.toLowerCase())) {
+            return "Password must contain at least one uppercase letter";
+        } else if (password.contains(" ")) {
+            return "Password must not contain spaces";
+        } else if (!password.equals(confirmPassword)) {
+            return "Passwords do not match";
+        } else {
+            return ""; // No error message
+        }
+    }
 
 
     private void saveAndDisplayImage(Uri photoUri) {
@@ -170,7 +155,6 @@ public class RegisterActivity extends AppCompatActivity implements PostCallback 
             e.printStackTrace();
         }
     }
-
 
 
 }

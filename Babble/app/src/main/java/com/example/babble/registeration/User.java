@@ -1,6 +1,8 @@
 package com.example.babble.registeration;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
     private String username;
     private String displayName;
     private String password;
@@ -11,6 +13,33 @@ public class User {
         this.displayName = displayName;
         this.password = password;
         this.profilePic = profilePic;
+
+    }
+
+    public User(String username, String displayName, String profilePic) {
+        this.username = username;
+        this.displayName = displayName;
+        this.profilePic = profilePic;
+
+        // known - used for contact.
+        this.password = null;
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+
+        // unknown - used for login.
+        this.profilePic = null;
+    }
+
+    public User(String username) {
+        this.username = username;
+
+        // unknown - used for message.
+        this.displayName = null;
+        this.password = null;
+        this.profilePic = null;
     }
 
     public String getUsername() {

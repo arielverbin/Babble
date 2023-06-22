@@ -6,35 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".chats.ChatActivity">
 
-    <!-- ScrollView for Messages -->
-    <ScrollView
-        android:id="@+id/scrollViewMessages"
+    <!-- RecyclerView for Messages -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMessages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_above="@id/layoutMessageInput"
-        app:layout_constraintBottom_toTopOf="@id/layoutMessageInput"
+        android:layout_above="@+id/layoutMessageInput"
+        app:layout_constraintBottom_toTopOf="@+id/layoutMessageInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!-- Messages List place -->
-        <LinearLayout
-            android:id="@+id/layoutMessageList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="10dp">
-
-            <TextView
-                android:id="@+id/topOfChatMsg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/no_previous_messages"
-                android:textColor="?android:textColorSecondary"
-                android:layout_gravity="center"
-                android:padding="20dp"/>
-        </LinearLayout>
-    </ScrollView>
+        app:layout_constraintTop_toTopOf="parent"
+        android:clipToPadding="false"
+        android:paddingBottom="10dp" />
 
     <!-- Chatbox Layout -->
     <RelativeLayout
@@ -44,7 +27,6 @@
         android:background="?itemTextColor"
         app:cardCornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="NotSibling">
@@ -59,7 +41,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="8dp"
-
             android:layout_marginTop="8dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="8dp"
@@ -72,15 +53,14 @@
             android:inputType="textMultiLine"
             android:minLines="1"
             android:maxLines="6"
-            android:scrollbars="vertical"
-            />
+            android:scrollbars="vertical" />
 
         <!-- Send Button -->
         <ImageButton
             android:id="@+id/send_btn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/messageBox"
+            android:layout_alignBottom="@id/messageBox"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="-8dp"

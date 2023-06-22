@@ -1,5 +1,9 @@
 package com.example.babble.contacts;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,26 +13,37 @@ import android.widget.TextView;
 
 import com.example.babble.R;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsAdapter extends BaseAdapter {
 
-    private List<Contact> contacts;
+    private final List<Contact> contacts;
 
-    private class ViewHolder {
+    private static class ViewHolder {
         TextView nameTextView;
         TextView lastMessageTextView;
         TextView timeChattedTextView;
         ImageView profileImageView;
     }
 
-    public ContactsAdapter(List<Contact> contacts) {
-        this.contacts = contacts;
+    public ContactsAdapter() {
+        this.contacts = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
         return contacts.size();
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts.clear();
+        if (contacts != null) {
+            this.contacts.addAll(contacts);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -38,7 +53,7 @@ public class ContactsAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return contacts.get(position).getId();
+        return 0;
     }
 
     @Override
@@ -60,12 +75,21 @@ public class ContactsAdapter extends BaseAdapter {
         }
 
         Contact contact = contacts.get(position);
-        String name = contact.getDisplayName() + " id=" +contact.getId();
+        String name = contact.getDisplayName();
         viewHolder.nameTextView.setText(name);
         viewHolder.lastMessageTextView.setText(contact.getLastMessage());
         viewHolder.timeChattedTextView.setText(contact.getTimeChatted());
-        //viewHolder.profileImageView.setImageBitmap(contact.getProfilePicture());
+
+        String base64ProfilePic = contact.getProfilePicture();
+        // remove "data:image/jpg;base64"
+        String pureBase64Encoded = base64ProfilePic.substring(base64ProfilePic.indexOf(",")  + 1);
+        // decode to bitmap.
+        byte[] decodedString = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        viewHolder.profileImageView.setImageBitmap(decodedByte);
 
         return convertView;
     }
+
 }

@@ -1,11 +1,11 @@
-package com.example.babble.api;
+package com.example.babble.API;
 
-import com.example.babble.chats.MessageFromServer;
-import com.example.babble.chats.UserDataToSet;
-import com.example.babble.chats.UserDetailsFromServer;
-import com.example.babble.contacts.ContactAfterAdd;
-import com.example.babble.contacts.ContactFromServer;
-import com.example.babble.registeration.LoginUser;
+import com.example.babble.UserDataToSettings;
+import com.example.babble.chats.Message;
+import com.example.babble.chats.ServerMessage;
+
+import com.example.babble.contacts.Contact;
+import com.example.babble.contacts.ServerContact;
 import com.example.babble.registeration.User;
 import java.util.List;
 import retrofit2.Call;
@@ -18,49 +18,49 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface WebServiceAPI {
-     @GET("Users")
-     Call<List<User>> getUsers();
+    @GET("Users")
+    Call<List<User>> getUsers();
 
-     @POST("Tokens")
-     Call<String> login(@Body LoginUser loginUser);
+    @POST("Tokens")
+    Call<String> login(@Body User loginUser);
 
-     @POST("Users")
-     Call<Void> createUser(@Body User user);
+    @POST("Users")
+    Call<Void> createUser(@Body User user);
 
-     @DELETE("Users/{id}")
-     Call<Void> deleteUser(@Path("id") int id);
+    @DELETE("Users/{id}")
+    Call<Void> deleteUser(@Path("id") String id);
 
-     @GET("Users/{id}")
-     Call<UserDetailsFromServer> getUserDetails(@Path("id") int id,
-                                                @Header("Content-Type") String contentType,
-                                                @Header("Authorization") String token);
-     @PUT("Users/{id}")
-     Call<Void> setUserDetails(@Path("id") int id,
-                                                @Header("Content-Type") String contentType,
-                                                @Header("Authorization") String token,
-                                                @Body UserDataToSet data);
-
-     @GET("Chats")
-     Call<List<ContactFromServer>> getContacts(@Header("Content-Type") String contentType,
-                                               @Header("Authorization") String token);
-     @POST("Chats")
-     Call<ContactAfterAdd> addContact(@Header("Content-Type") String contentType,
-                                      @Header("Authorization") String token,
-                                      @Body String username);
-     @GET("Chats/{id}/Messages")
-     Call<List<MessageFromServer>> getMessages(@Path("id") int id,
+    @GET("Users/{username}")
+    Call<User> getUserDetails(@Path("username") String username,
                                                @Header("Content-Type") String contentType,
-                                               @Header("Authorization") String token,
-                                               @Body String message);
-
-     @POST("Chats/{id}/Messages")
-     Call<Void> sendMessage(@Path("id") int id,
-                        @Header("Content-Type") String contentType,
-                        @Header("Authorization") String token);
-
-     @DELETE("Chats/{id}")
-     Call<Void> deleteContact(@Path("id") int id,
+                                               @Header("Authorization") String token);
+    @PUT("Users/{username}")
+    Call<Void> setUserDetails(@Path("username") String username,
                               @Header("Content-Type") String contentType,
-                              @Header("Authorization") String token);
+                              @Header("Authorization") String token,
+                              @Body UserDataToSettings data);
+
+    @GET("Chats")
+    Call<List<ServerContact>> getContacts(@Header("Content-Type") String contentType,
+                                          @Header("Authorization") String token);
+    @POST("Chats")
+    Call<ServerContact> addContact(@Header("Content-Type") String contentType,
+                                     @Header("Authorization") String token,
+                                     @Body Contact contact);
+    @GET("Chats/{id}/Messages")
+    Call<List<ServerMessage>> getMessages(@Path("id") String id,
+                                          @Header("Content-Type") String contentType,
+                                          @Header("Authorization") String token);
+
+    @POST("Chats/{id}/Messages")
+    Call<Void> sendMessage(@Path("id") String id,
+                           @Header("Content-Type") String contentType,
+                           @Header("Authorization") String token,
+                           @Body Message message);
+
+    @DELETE("Chats/{id}")
+    Call<Void> deleteContact(@Path("id") String id,
+                             @Header("Content-Type") String contentType,
+                             @Header("Authorization") String token);
 
 }

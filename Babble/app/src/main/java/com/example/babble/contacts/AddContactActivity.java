@@ -1,18 +1,20 @@
 package com.example.babble.contacts;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
-import com.example.babble.AppDB;
+import com.example.babble.R;
 import com.example.babble.databinding.ActivityAddContactBinding;
+import com.example.babble.registeration.RequestCallBack;
 
 public class AddContactActivity extends AppCompatActivity {
 
-    private AppDB db;
-    private ContactDao contactDao;
-
+    private ContactsViewModel contactsViewModel;
     private ActivityAddContactBinding binding;
 
     @Override
@@ -27,10 +29,9 @@ public class AddContactActivity extends AppCompatActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDB.class, "AppDB")
-                .allowMainThreadQueries().build();
+        // initialize view model.
+        contactsViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
 
-        contactDao = db.contactDao();
         handleSave();
     }
 
@@ -43,11 +44,35 @@ public class AddContactActivity extends AppCompatActivity {
     private void handleSave() {
         binding.addBtn.setOnClickListener(view -> {
             String username = binding.newContactInput.getText().toString();
-            Contact contact = new Contact(username, username, null, "This conversation is new.", "12:23");
+            if (username.isEmpty()) return;
 
-            contactDao.insert(contact);
+            // Error if the username already exists.
+            Contact existingContact = contactsViewModel.getContactByUsername(username);
+            if(existingContact != null) {
+                TextView errorMsg = binding.errorMsg;
+                errorMsg.setText(R.string.username_already_exists);
+                CardView errorCard = binding.errorCard;
+                errorCard.setVisibility(View.VISIBLE);
+                return;
+            }
 
-            finish();
+            // insert new contact to database.
+            contactsViewModel.insertContact(username, new RequestCallBack() {
+                // display error message.
+                @Override
+                public void onFailure(String error) {
+                    TextView errorMsg = binding.errorMsg;
+                    errorMsg.setText(error);
+                    CardView errorCard = binding.errorCard;
+                    errorCard.setVisibility(View.VISIBLE);
+                }
+
+                // success! finish activity.
+                @Override
+                public void onSuccess() {
+                    finish();
+                }
+            });
         });
     }
 }

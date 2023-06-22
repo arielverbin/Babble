@@ -75,8 +75,7 @@
                         android:autofillHints="@string/nameChangeHint"
                         android:hint="@string/nameChangeHint"
                         android:inputType="text"
-                        android:paddingTop="15dp"
-                        android:text="Katniss Everdeen" />
+                        android:paddingTop="15dp" />
 
                 </LinearLayout>
 

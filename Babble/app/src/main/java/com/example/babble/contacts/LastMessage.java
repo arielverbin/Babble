@@ -1,9 +1,16 @@
 package com.example.babble.contacts;
 
+// Last message object from server.
 public class LastMessage {
     private int id;
     private String created;
     private String content;
+
+    public LastMessage(int id, String created, String content) {
+        this.id = id;
+        this.created = created;
+        this.content = content;
+    }
 
     public int getId() {
         return id;
@@ -29,9 +36,4 @@ public class LastMessage {
         this.content = content;
     }
 
-    public LastMessage(int id, String created, String content) {
-        this.id = id;
-        this.created = created;
-        this.content = content;
-    }
 }
