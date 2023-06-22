@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.babble.registeration.RequestCallBack;
+
 import java.util.List;
 
 public class ChatsViewModel extends AndroidViewModel {
@@ -23,8 +25,8 @@ public class ChatsViewModel extends AndroidViewModel {
         this.application = application;
     }
 
-    public void setChat(int chatId) {
-        chatsRepository = new ChatsRepository(application, chatId);
+    public void setChat(String chatId, String username) {
+        chatsRepository = new ChatsRepository(application, chatId, username);
         allMessages = chatsRepository.getAllMessages();
     }
 
@@ -32,20 +34,13 @@ public class ChatsViewModel extends AndroidViewModel {
         return allMessages;
     }
 
-    public Message getMessageById(int id) {
+    public Message getMessageById(String id) {
         return chatsRepository.getMessage(id);
     }
 
 
-    public void insertMessage(Message message) {
-        chatsRepository.insertMessage(message);
+    public void insertMessage(Message message, RequestCallBack callBack) {
+        chatsRepository.insertMessage(message, callBack);
     }
 
-    public void updateMessage(Message message) {
-        chatsRepository.updateMessage(message);
-    }
-
-    public void deleteMessage(Message message) {
-        chatsRepository.deleteMessage(message);
-    }
 }

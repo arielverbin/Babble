@@ -27,7 +27,7 @@
                 app:cardCornerRadius="250dp">
 
                 <ImageView
-                    android:id="@+id/profileImage"
+                    android:id="@+id/profileChatImage"
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"

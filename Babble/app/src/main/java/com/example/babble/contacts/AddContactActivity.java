@@ -3,12 +3,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.babble.R;
 import com.example.babble.databinding.ActivityAddContactBinding;
+import com.example.babble.registeration.RequestCallBack;
 
 public class AddContactActivity extends AppCompatActivity {
 
@@ -54,12 +56,23 @@ public class AddContactActivity extends AppCompatActivity {
                 return;
             }
 
-            Contact newContact = new Contact(username, username, null, "This conversation is new", "");
-
             // insert new contact to database.
-            contactsViewModel.insertContact(newContact);
+            contactsViewModel.insertContact(username, new RequestCallBack() {
+                // display error message.
+                @Override
+                public void onFailure(String error) {
+                    TextView errorMsg = binding.errorMsg;
+                    errorMsg.setText(error);
+                    CardView errorCard = binding.errorCard;
+                    errorCard.setVisibility(View.VISIBLE);
+                }
 
-            finish();
+                // success! finish activity.
+                @Override
+                public void onSuccess() {
+                    finish();
+                }
+            });
         });
     }
 }

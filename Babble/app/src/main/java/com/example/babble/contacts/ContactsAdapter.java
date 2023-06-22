@@ -1,5 +1,8 @@
 package com.example.babble.contacts;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,8 @@ import android.widget.TextView;
 
 import com.example.babble.R;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +53,7 @@ public class ContactsAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return contacts.get(position).getId();
+        return 0;
     }
 
     @Override
@@ -74,7 +79,15 @@ public class ContactsAdapter extends BaseAdapter {
         viewHolder.nameTextView.setText(name);
         viewHolder.lastMessageTextView.setText(contact.getLastMessage());
         viewHolder.timeChattedTextView.setText(contact.getTimeChatted());
-        //viewHolder.profileImageView.setImageBitmap(contact.getProfilePicture());
+
+        String base64ProfilePic = contact.getProfilePicture();
+        // remove "data:image/jpg;base64"
+        String pureBase64Encoded = base64ProfilePic.substring(base64ProfilePic.indexOf(",")  + 1);
+        // decode to bitmap.
+        byte[] decodedString = Base64.decode(pureBase64Encoded, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        viewHolder.profileImageView.setImageBitmap(decodedByte);
 
         return convertView;
     }

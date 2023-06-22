@@ -6,6 +6,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
+import com.example.babble.registeration.RequestCallBack;
+
 import java.util.List;
 
 public class ContactsViewModel extends AndroidViewModel {
@@ -23,7 +26,7 @@ public class ContactsViewModel extends AndroidViewModel {
         return allContacts;
     }
 
-    public Contact getContactById(int id) {
+    public Contact getContactById(String id) {
         return contactsRepository.getContactById(id);
     }
 
@@ -31,23 +34,19 @@ public class ContactsViewModel extends AndroidViewModel {
         return contactsRepository.getContactByUsername(username);
     }
 
-    public void insertContact(Contact contact) {
-        contactsRepository.insertContact(contact);
+    public void insertContact(String username, RequestCallBack callBack) {
+        contactsRepository.insertContact(username, callBack);
     }
 
-    public void updateContact(Contact contact) {
-        contactsRepository.updateContact(contact);
+    public void updateContact(Contact contact, RequestCallBack callBack) {
+        contactsRepository.updateContact(contact, callBack);
     }
 
-    public void setLastMessage(int contactId, String lastMes, String timeChatted) {
-        contactsRepository.updateLastMessage(contactId, lastMes, timeChatted);
+    public void setLastMessage(String contactId, String lastMes, String timeChatted, RequestCallBack callBack) {
+        contactsRepository.updateLastMessage(contactId, lastMes, timeChatted, callBack);
     }
 
-    public void deleteContact(Contact contact) {
-        contactsRepository.deleteContact(contact);
-    }
-
-    public void deleteContactById(int id) {
-        contactsRepository.deleteContactById(id);
+    public void deleteContact(String userId, RequestCallBack callBack) {
+        contactsRepository.deleteContact(userId, callBack);
     }
 }

@@ -14,7 +14,7 @@ public interface ContactDao {
     List<Contact> index();
 
     @Query("SELECT * FROM contact WHERE id = :id")
-    Contact get(int id);
+    Contact get(String id);
 
     @Query("SELECT * FROM contact WHERE username = :username LIMIT 1")
     Contact getByUsername(String username);
@@ -29,9 +29,14 @@ public interface ContactDao {
     void delete(Contact contact);
 
     @Query("DELETE FROM contact WHERE id = :id")
-    void deleteById(int id);
+    void deleteById(String id);
 
     @Query("UPDATE contact SET lastMessage = :content, timeChatted = :timeSent WHERE id = :contactID")
-    void setLastMessage(int contactID, String content, String timeSent);
+    void setLastMessage(String contactID, String content, String timeSent);
 
+    @Query("DELETE FROM contact")
+    void clear();
+
+    @Insert
+    void insertAll(List<Contact> contacts);
 }

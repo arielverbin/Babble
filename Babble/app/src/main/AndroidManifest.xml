@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -11,7 +16,8 @@
         android:roundIcon="@mipmap/babblelogo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Babble"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
@@ -25,10 +31,10 @@
             android:name=".contacts.ContactsActivity"
             android:exported="false" />
         <activity
-            android:name=".registeration.LoginActivity"
+            android:name=".registeration.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".registeration.RegisterActivity"
+            android:name=".registeration.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

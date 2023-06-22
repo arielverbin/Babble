@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.babble.R;
-import com.example.babble.contacts.Contact;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -63,7 +62,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         notifyItemInserted(messageList.size() - 1);
 
         if (getItemCount() == 2) {
-            messageList.get(0).setContent("No previous messages.");
+            messageList.get(0).setMsg("No previous messages.");
             notifyItemChanged(0);
         }
     }
@@ -93,11 +92,11 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
 
         void bind(Message message) {
             if (waterMarkTextView != null) {
-                waterMarkTextView.setText(message.getContent());
+                waterMarkTextView.setText(message.getMsg());
                 return;
             }
-            messageTextView.setText(message.getContent());
-            timestampTextView.setText(message.getTimeSent());
+            messageTextView.setText(message.getMsg());
+            timestampTextView.setText(message.getCreated());
 
         }
     }
@@ -112,5 +111,4 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         messageList.addAll(messages);
         notifyDataSetChanged();
     }
-
 }

@@ -1,12 +1,16 @@
 package com.example.babble.chats;
 
+import android.content.Context;
 import android.content.ContextWrapper;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
+import com.example.babble.API.ChatsAPI;
 import com.example.babble.AppDB;
+import com.example.babble.MyApplication;
+import com.example.babble.registeration.RequestCallBack;
 
 
 import java.util.LinkedList;
@@ -15,11 +19,16 @@ import java.util.List;
 public class ChatsRepository {
 
     private final MessageDao messageDao;
-    private final int currentChatId;
+
+    private final Context context;
+    private final ChatsAPI api;
+    private final String currentChatId;
+    private final String currentUsername;
     private final MutableLiveData<List<Message>> messagesListData;
 
-    public ChatsRepository(ContextWrapper context, int chatId) {
+    public ChatsRepository(ContextWrapper context, String chatId, String username) {
         this.currentChatId = chatId;
+        this.currentUsername = username;
 
         AppDB db = Room.databaseBuilder(context, AppDB.class, "AppDB")
                 .allowMainThreadQueries()
@@ -28,6 +37,9 @@ public class ChatsRepository {
         messageDao = db.messageDao();
         messagesListData = new MessagesListData();
 
+        this.context = context;
+        this.api = new ChatsAPI();
+
         updateMessagesList();
     }
 
@@ -35,30 +47,28 @@ public class ChatsRepository {
         return messagesListData;
     }
 
-    public Message getMessage(int id) {
+    public Message getMessage(String id) {
         return messageDao.get(id);
     }
 
-    public void insertMessage(Message message) {
+    public void insertMessage(Message message, RequestCallBack callback) {
         new Thread(() -> {
-            messageDao.insert(message);
-            updateMessagesList();
+            api.sendMessage(MyApplication.context, currentChatId, message, new RequestCallBack() {
+                // success! update contact list, notifying caller with "success"
+                @Override
+                public void onSuccess() {
+                    updateMessagesList();
+                    callback.onSuccess();
+                }
+                // notifying caller with "failure"
+                @Override
+                public void onFailure(String error) {
+                    callback.onFailure(error);
+                }
+            });
         }).start();
     }
 
-    public void updateMessage(Message message) {
-        new Thread(() -> {
-            messageDao.update(message);
-            updateMessagesList();
-        }).start();
-    }
-
-    public void deleteMessage(Message message) {
-        new Thread(() -> {
-            messageDao.delete(message);
-            updateMessagesList();
-        }).start();
-    }
 
     private void updateMessagesList() {
         List<Message> messages = messageDao.getChat(currentChatId);
@@ -74,9 +84,17 @@ public class ChatsRepository {
         }
 
         @Override
-        protected void onActive() {
-            super.onActive();
-            new Thread(() -> messagesListData.postValue(messageDao.getChat(currentChatId))).start();
+        public void onActive() {
+
+            new Thread(() -> {
+                api.getMessages(context, currentChatId, currentUsername, new RequestCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        updateMessagesList();
+                    }
+                });
+
+            }).start();
         }
     }
 

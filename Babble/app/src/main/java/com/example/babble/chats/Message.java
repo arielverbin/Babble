@@ -11,39 +11,42 @@ import java.util.Locale;
 
 @Entity
 public class Message {
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private final int chatId;
-    private String content;
-    private String timeSent;
+    private final String chatId;
+    private String msg;
+    private String created;
 
-    public void setTimeSent(String timeSent) {
-        this.timeSent = timeSent;
-    }
-
-    public void setTimeSentExtended(String timeSentExtended) {
-        this.timeSentExtended = timeSentExtended;
-    }
 
     private String timeSentExtended;
     private final boolean sent;
 
     private boolean isWatermark;
 
-    public Message(String content, int chatId ,boolean sent) {
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public void setTimeSentExtended(String timeSentExtended) {
+        this.timeSentExtended = timeSentExtended;
+    }
+
+    public Message(String msg, String chatId, String created,
+                   String timeSentExtended, boolean sent) {
+
         this.chatId = chatId;
-        this.content = content;
-        this.timeSent = getTimestamp();
+        this.msg = msg;
         this.sent = sent;
         this.isWatermark = false;
 
-        this.timeSent = DateGenerator.getCurrentHour();
-        this.timeSentExtended = DateGenerator.getCurrentTimeDay();
+        this.created = created;
+        this.timeSentExtended = timeSentExtended;
     }
 
-    public String getTimeSent() {
-        return timeSent;
+    public String getCreated() {
+        return created;
     }
 
     public String getTimeSentExtended() {
@@ -59,12 +62,12 @@ public class Message {
         return this;
     }
 
-    public String getContent() {
-        return content;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public boolean isSent() {
@@ -75,7 +78,7 @@ public class Message {
         return isWatermark;
     }
 
-    public int getChatId(){
+    public String getChatId(){
         return chatId;
     }
     public int getId(){
@@ -85,6 +88,10 @@ public class Message {
 
     public void setId(int id){
         this.id = id;
+    }
+
+    public String getDaySent() {
+        return DateGenerator.timeDayToDay(this.timeSentExtended);
     }
 
     public String getTimestamp() {
