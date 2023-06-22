@@ -1,5 +1,6 @@
 package com.example.babble.contacts;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,26 +10,35 @@ import android.widget.TextView;
 
 import com.example.babble.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsAdapter extends BaseAdapter {
 
-    List<Contact> contacts;
+    private final List<Contact> contacts;
 
-    private class ViewHolder {
-        TextView name;
-        TextView lastMes;
-        TextView timeChatted;
-        ImageView profilePic;
+    private static class ViewHolder {
+        TextView nameTextView;
+        TextView lastMessageTextView;
+        TextView timeChattedTextView;
+        ImageView profileImageView;
     }
 
-    public ContactsAdapter(List<Contact> contacts) {
-        this.contacts = contacts;
+    public ContactsAdapter() {
+        this.contacts = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
         return contacts.size();
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts.clear();
+        if (contacts != null) {
+            this.contacts.addAll(contacts);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -38,30 +48,33 @@ public class ContactsAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return contacts.get(position).getId();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.contact_layout, parent, false);
 
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.name = convertView.findViewById(R.id.contactName);
-            viewHolder.lastMes = convertView.findViewById(R.id.lastMessage);
-            viewHolder.timeChatted = convertView.findViewById(R.id.timeChatted);
-            viewHolder.profilePic = convertView.findViewById(R.id.profileImage);
+            viewHolder = new ViewHolder();
+            viewHolder.nameTextView = convertView.findViewById(R.id.contactName);
+            viewHolder.lastMessageTextView = convertView.findViewById(R.id.lastMessage);
+            viewHolder.timeChattedTextView = convertView.findViewById(R.id.timeChatted);
+            viewHolder.profileImageView = convertView.findViewById(R.id.profileImage);
 
             convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Contact c = contacts.get(position);
-        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        viewHolder.name.setText(c.getDisplayName());
-        viewHolder.lastMes.setText(c.getLastMessage());
-        viewHolder.timeChatted.setText(c.getTimeChatted());
-        viewHolder.profilePic.setImageBitmap(c.getProfilePicture());
+        Contact contact = contacts.get(position);
+        String name = contact.getDisplayName();
+        viewHolder.nameTextView.setText(name);
+        viewHolder.lastMessageTextView.setText(contact.getLastMessage());
+        viewHolder.timeChattedTextView.setText(contact.getTimeChatted());
+        //viewHolder.profileImageView.setImageBitmap(contact.getProfilePicture());
 
         return convertView;
     }

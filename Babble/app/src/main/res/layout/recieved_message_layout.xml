@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
-    android:layout_marginTop="16dp">
+    android:layout_marginTop="2dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_gchat_message_other"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
 
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         app:cardBackgroundColor="?cardBackgroundColor"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
@@ -51,6 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
                 android:layout_marginBottom="8dp"
                 android:text="@{message.timestamp}"
                 android:textColor="#9F9F9F"

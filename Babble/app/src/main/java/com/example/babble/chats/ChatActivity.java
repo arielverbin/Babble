@@ -1,24 +1,35 @@
 package com.example.babble.chats;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.babble.R;
+import com.example.babble.contacts.ContactsViewModel;
 import com.example.babble.databinding.ActivityChatBinding;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
-    ActivityChatBinding binding;
+    private ActivityChatBinding binding;
 
+    private ChatsViewModel chatsViewModel;
+    private ContactsViewModel contactsViewModel;
+
+    private MessageListAdapter messageListAdapter;
+
+    private int currentChatId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +38,26 @@ public class ChatActivity extends AppCompatActivity {
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setTitle("Ross Geller");
+        // Receive current chat id, given by the ContactsActivity.
+        Intent intent = getIntent();
+        String chatIdString = intent.getStringExtra("chatId");
+        if (chatIdString != null) {
+            currentChatId = Integer.parseInt(chatIdString);
+        } else finish();
 
+        // initialize the view models.
+        contactsViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
+        chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
+        chatsViewModel.setChat(currentChatId);
+
+        handleContact();
+
+        handleActionBar();
+
+        handleSendMessage();
+    }
+
+    private void handleActionBar() {
         // Inflate the custom action bar layout
         View actionBarLayout = getLayoutInflater().inflate(R.layout.chat_actionbar_layout, null);
 
@@ -38,23 +67,10 @@ public class ChatActivity extends AppCompatActivity {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionBar.setCustomView(actionBarLayout);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            TextView contactName = actionBarLayout.findViewById(R.id.contactName);
+            contactName.setText(contactsViewModel.getContactById(currentChatId).getDisplayName());
         }
-
-        LinearLayout layoutMessageList = findViewById(R.id.layoutMessageList);
-
-        List<Message> messageList = getMessages(); // Replace with your own method to retrieve the message list
-
-        // Initializing the chat going through all of messages and present each message in the right form (whether its a sender's or receiver's
-        MessageListAdapter messageListAdapter = new MessageListAdapter(this, messageList);
-        List<View> messageViews = messageListAdapter.getMessageViews();
-
-        for (View messageView : messageViews) {
-            layoutMessageList.addView(messageView);
-        }
-
-        // Auto scroll all the way down.
-        ScrollView scrollView = findViewById(R.id.scrollViewMessages);
-        scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
 
     @Override
@@ -70,23 +86,79 @@ public class ChatActivity extends AppCompatActivity {
         return true;
     }
 
-    private List<Message> getMessages() {
-        List<Message> messageList = new ArrayList<>();
+    private void handleContact() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewMessages);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
-        // Create some sample messages
-        Message message1 = new Message("Hello, how are you?", true);
-        Message message2 = new Message("Hi John, I'm doing great. How about you?", false);
-        Message message3 = new Message("I'm doing well too. Thanks for asking!", true);
+        // Set adapter to message list.
+        messageListAdapter = new MessageListAdapter(this);
+        recyclerView.setAdapter(messageListAdapter);
 
-        // Add the messages to the list
-        messageList.add(message1);
-        messageList.add(message2);
-        messageList.add(message3);
-        messageList.add(message1);
-        messageList.add(message2);
-        messageList.add(message3);
+        // observe for initial creation - fetch all messages.
+        chatsViewModel.getAllMessages().observe(this, messageList -> {
+            if (messageList.size() == 0) {
+                messageList.add(0, new Message("Looks like there aren't any messages yet.", currentChatId, true).convertToWatermark());
+            } else {
+                messageList.add(0, new Message("No previous messages.", currentChatId, true).convertToWatermark());
+            }
 
-        return messageList;
+            chatsViewModel.getAllMessages().observe(this, messages -> {
+                messageListAdapter.setMessages(messages);
+                scrollDown(); // scroll to the bottom.
+            });
+        });
+    }
+
+
+    private void handleSendMessage() {
+        ImageButton sendBtn = binding.sendBtn;
+
+        sendBtn.setOnClickListener(view -> {
+            EditText messageInput = binding.messageBox;
+            String messageContent = messageInput.getText().toString();
+
+            if (messageContent.equals("")) return; // prevent empty messages.
+            messageInput.setText(""); // empty text box.
+
+            Message message = new Message(messageContent, currentChatId, true);
+
+            // insert new message and observe for updating the adapter.
+            chatsViewModel.insertMessage(message);
+            chatsViewModel.getAllMessages().observe(this, messages -> {
+                        Message newMessage = messages.get(messages.size() - 1);
+                        messageListAdapter.insertLastMessage(newMessage);
+
+                        contactsViewModel.setLastMessage(currentChatId, newMessage.getContent(), newMessage.getTimeSentExtended());
+                    }
+            );
+
+            scrollDown();
+        });
+    }
+
+
+    private void scrollDown() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewMessages);
+        int itemCount = messageListAdapter.getItemCount();
+        if (itemCount > 0) {
+            recyclerView.scrollToPosition(itemCount - 1);
+        }
+    }
+
+
+    // delete a chat.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.deleteChat) {
+            contactsViewModel.deleteContactById(currentChatId);
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
