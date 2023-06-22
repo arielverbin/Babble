@@ -22,6 +22,14 @@ public class Contact {
         this.timeChatted = timeChatted;
     }
 
+    public Contact(ContactFromServer serverContact) {
+        this.username = serverContact.getUser().getUsername();
+        this.displayName = serverContact.getUser().getDisplayName();
+        this.profilePicturePath = serverContact.getUser().getProfilePic();
+        this.lastMessage = serverContact.getLastMessage().getContent();
+        this.timeChatted = serverContact.getLastMessage().getCreated();
+    }
+
     public int getId() {
         return id;
     }

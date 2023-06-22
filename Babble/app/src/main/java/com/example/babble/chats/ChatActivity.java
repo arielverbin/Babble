@@ -2,20 +2,16 @@ package com.example.babble.chats;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-
 import com.example.babble.AppDB;
 import com.example.babble.R;
 import com.example.babble.databinding.ActivityChatBinding;
-
 import java.util.ArrayList;
 import java.util.List;
 
