@@ -1,7 +1,7 @@
-package com.example.babble.contacts;
+package com.example.babble.serverObjects;
 
-import com.example.babble.DateGenerator;
-import com.example.babble.registeration.User;
+import com.example.babble.utilities.DateGenerator;
+import com.example.babble.entities.Contact;
 
 
 // Contact in server format.

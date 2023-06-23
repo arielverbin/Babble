@@ -22,7 +22,6 @@
     <string name="nameChangeHint">New display name</string>
     <string name="picChangeDescrip">profilePicChange</string>
     <string name="serverAddrHint">Set Server\'s address</string>
-    <string name="defaultAddress">http://localhost:5001</string>
     <string name="themeHint">Theme (Light / Dark)</string>
     <string name="save">Save</string>
     <string name="serverAddrDescr">Server\'s address</string>

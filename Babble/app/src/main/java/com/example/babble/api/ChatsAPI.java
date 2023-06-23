@@ -7,12 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import com.example.babble.AppDB;
-import com.example.babble.MyApplication;
-import com.example.babble.R;
-import com.example.babble.chats.Message;
-import com.example.babble.chats.MessageDao;
-import com.example.babble.chats.ServerMessage;
-import com.example.babble.registeration.RequestCallBack;
+import com.example.babble.entities.Message;
+import com.example.babble.entities.MessageDao;
+import com.example.babble.serverObjects.ServerMessage;
+import com.example.babble.utilities.RequestCallBack;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
@@ -26,23 +24,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ChatsAPI {
 
 
-    WebServiceAPI webServiceAPI;
+    private final WebServiceAPI webServiceAPI;
 
-    MessageDao dao;
+    private final String token;
+
+    private final MessageDao messageDao;
 
 
-    public ChatsAPI() {
-        AppDB db = Room.databaseBuilder(MyApplication.context, AppDB.class, "AppDB")
+    public ChatsAPI(Context context) {
+        AppDB db = Room.databaseBuilder(context, AppDB.class, "AppDB")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
-        dao = db.messageDao();
+        messageDao = db.messageDao();
+
+        this.token = db.preferenceDao().get("token");
 
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
+                .baseUrl(db.preferenceDao().get("serverUrl"))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
@@ -52,7 +54,7 @@ public class ChatsAPI {
                             RequestCallBack callback) {
         Call<List<ServerMessage>> call = webServiceAPI.getMessages(chatId,
                 "application/json",
-                "Bearer " + MyApplication.getToken());
+                "Bearer " + this.token);
 
         call.enqueue(new Callback<List<ServerMessage>>() {
             @Override
@@ -68,8 +70,8 @@ public class ChatsAPI {
                             chatMessages.add(0, message.convertToMessage(username, chatId));
                         }
                         // success! update dao and notify caller with "success"
-                        dao.clearChat(chatId); // no need to clear messages from other chats.
-                        dao.insertAll(chatMessages);
+                        messageDao.clearChat(chatId); // no need to clear messages from other chats.
+                        messageDao.insertAll(chatMessages);
                         callback.onSuccess();
 
                     } else {
@@ -94,14 +96,14 @@ public class ChatsAPI {
                             RequestCallBack callback) {
         Call<Void> call = webServiceAPI.sendMessage(chatId,
                 "application/json",
-                "Bearer " + MyApplication.getToken(), message);
+                "Bearer " + this.token, message);
 
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call,
                                    @NonNull Response<Void> response) {
                 if (response.code() == 200) {
-                    dao.insert(message);
+                    messageDao.insert(message);
                     callback.onSuccess();
                 } else {
                     callback.onFailure("Could not send message (code: "

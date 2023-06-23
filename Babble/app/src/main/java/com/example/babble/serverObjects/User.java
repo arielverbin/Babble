@@ -1,4 +1,4 @@
-package com.example.babble.registeration;
+package com.example.babble.serverObjects;
 
 import java.io.Serializable;
 

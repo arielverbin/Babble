@@ -4,11 +4,14 @@ import android.content.Context;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.room.Room;
 
-import com.example.babble.MyApplication;
-import com.example.babble.R;
-import com.example.babble.registeration.RequestCallBack;
-import com.example.babble.registeration.User;
+import com.example.babble.AppDB;
+import com.example.babble.serverObjects.UserDataToSettings;
+import com.example.babble.entities.Preference;
+import com.example.babble.entities.PreferenceDao;
+import com.example.babble.utilities.RequestCallBack;
+import com.example.babble.serverObjects.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,15 +24,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class UserAPI {
     private final WebServiceAPI webServiceAPI;
 
-    public UserAPI() {
+    private final PreferenceDao preferenceDao;
+
+    public UserAPI(Context context) {
+        AppDB db = Room.databaseBuilder(context, AppDB.class, "AppDB")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+        preferenceDao = db.preferenceDao();
+
         // Create Gson instance with lenient mode
         Gson gson = new GsonBuilder().setLenient().create();
 
         // Create Retrofit instance with base URL and Gson converter
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
+                .baseUrl(preferenceDao.get("serverUrl"))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+
 
         // Create WebServiceAPI instance for making API calls
         webServiceAPI = retrofit.create(WebServiceAPI.class);
@@ -41,8 +53,11 @@ public class UserAPI {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
+
                     // get user details and start the contacts activity.
-                    MyApplication.setToken(response.body());
+                    String token = response.body();
+                    preferenceDao.set(new Preference("token", token));
+
                     getUserDetails(context, callback, loginUser.getUsername(), response.body());
 
                 } else {
@@ -71,7 +86,9 @@ public class UserAPI {
                 if(response.isSuccessful()) {
                     User userDetails = response.body();
                     if(userDetails != null) {
-                        MyApplication.setUser(userDetails);
+                        preferenceDao.set(new Preference("username", userDetails.getUsername()));
+                        preferenceDao.set(new Preference("profilePic", userDetails.getProfilePic()));
+                        preferenceDao.set(new Preference("displayName", userDetails.getDisplayName()));
                         callback.onSuccess();
                     } else {
                         callback.onFailure("Error fetching your details from server.");
@@ -84,6 +101,29 @@ public class UserAPI {
                 Toast.makeText(context, "Failed: " + t.getMessage(),
                         Toast.LENGTH_LONG).show();
                 callback.onFailure("Error fetching your details from server: server connectivity error.");
+            }
+        });
+    }
+
+    public void setUserDetails(Context context, UserDataToSettings data, RequestCallBack callBack) {
+        String token = "Bearer " + preferenceDao.get("token");
+        Call<Void> call = webServiceAPI.setUserDetails(preferenceDao.get("username"),
+                "application/json", token, data);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if(response.code() == 200) {
+                    callBack.onSuccess();
+                } else {
+                    callBack.onFailure("Error saving data (Code " + response.code() + ")");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Failed: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+                callBack.onFailure("Error updating your data: server connectivity error.");
             }
         });
     }

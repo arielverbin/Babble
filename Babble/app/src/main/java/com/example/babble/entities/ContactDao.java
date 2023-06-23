@@ -1,4 +1,4 @@
-package com.example.babble.contacts;
+package com.example.babble.entities;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

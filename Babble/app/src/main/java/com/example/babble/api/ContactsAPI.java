@@ -7,12 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import com.example.babble.AppDB;
-import com.example.babble.MyApplication;
-import com.example.babble.R;
-import com.example.babble.contacts.Contact;
-import com.example.babble.contacts.ContactDao;
-import com.example.babble.contacts.ServerContact;
-import com.example.babble.registeration.RequestCallBack;
+import com.example.babble.entities.Contact;
+import com.example.babble.entities.ContactDao;
+import com.example.babble.serverObjects.ServerContact;
+import com.example.babble.utilities.RequestCallBack;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -27,20 +25,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ContactsAPI {
     WebServiceAPI webServiceAPI;
+
+    String token;
     ContactDao dao;
 
-    public ContactsAPI() {
-        AppDB db = Room.databaseBuilder(MyApplication.context, AppDB.class, "AppDB")
+    public ContactsAPI(Context context) {
+        AppDB db = Room.databaseBuilder(context, AppDB.class, "AppDB")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
         dao = db.contactDao();
 
+        this.token = db.preferenceDao().get("token");
+
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
+                .baseUrl(db.preferenceDao().get("serverUrl"))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
@@ -48,7 +50,7 @@ public class ContactsAPI {
 
     public void getContacts(Context context, RequestCallBack callback) {
         Call<List<ServerContact>> call = webServiceAPI.getContacts("application/json",
-                "Bearer " + MyApplication.getToken());
+                "Bearer " + this.token);
         call.enqueue(new Callback<List<ServerContact>>() {
             @Override
             public void onResponse(@NonNull Call<List<ServerContact>> call,
@@ -93,7 +95,7 @@ public class ContactsAPI {
 
     public void addContact(Context context, String username, RequestCallBack callBack) {
         Call<ServerContact> call = webServiceAPI.addContact("application/json",
-                "Bearer " + MyApplication.getToken(), new Contact("", username, "", "", "", ""));
+                "Bearer " + this.token, new Contact("", username, "", "", "", ""));
         call.enqueue(new Callback<ServerContact>() {
             @Override
             public void onResponse(@NonNull Call<ServerContact> call,
@@ -137,7 +139,7 @@ public class ContactsAPI {
     public void deleteContact(Context context, String id, RequestCallBack callBack) {
         Call<Void> call = webServiceAPI.deleteContact(id,
                 "application/json",
-                "Bearer " + MyApplication.getToken());
+                "Bearer " + this.token);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call,

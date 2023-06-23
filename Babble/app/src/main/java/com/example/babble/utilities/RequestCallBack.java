@@ -1,4 +1,4 @@
-package com.example.babble.registeration;
+package com.example.babble.utilities;
 
 // used in requests for server. Defines that to do after success or failure.
 public interface RequestCallBack {

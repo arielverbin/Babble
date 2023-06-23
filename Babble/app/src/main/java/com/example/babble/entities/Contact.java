@@ -1,4 +1,4 @@
-package com.example.babble.contacts;
+package com.example.babble.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -25,11 +25,12 @@ public class Contact {
         this.timeChatted = timeChatted;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 

@@ -1,4 +1,4 @@
-package com.example.babble;
+package com.example.babble.serverObjects;
 
 public class UserDataToSettings {
     private String newPic;

@@ -1,4 +1,4 @@
-package com.example.babble.chats;
+package com.example.babble.modelViews;
 
 
 import android.app.Application;
@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.babble.registeration.RequestCallBack;
+import com.example.babble.entities.Message;
+import com.example.babble.utilities.RequestCallBack;
+import com.example.babble.repositories.ChatsRepository;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.babble.contacts;
+package com.example.babble.serverObjects;
 
 // Last message object from server.
 public class LastMessage {

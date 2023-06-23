@@ -1,4 +1,4 @@
-package com.example.babble.chats;
+package com.example.babble.repositories;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -9,11 +9,11 @@ import androidx.room.Room;
 
 import com.example.babble.API.ChatsAPI;
 import com.example.babble.AppDB;
-import com.example.babble.MyApplication;
-import com.example.babble.registeration.RequestCallBack;
+import com.example.babble.entities.Message;
+import com.example.babble.entities.MessageDao;
+import com.example.babble.utilities.RequestCallBack;
 
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class ChatsRepository {
@@ -38,7 +38,7 @@ public class ChatsRepository {
         messagesListData = new MessagesListData();
 
         this.context = context;
-        this.api = new ChatsAPI();
+        this.api = new ChatsAPI(context);
 
         updateMessagesList();
     }
@@ -52,21 +52,19 @@ public class ChatsRepository {
     }
 
     public void insertMessage(Message message, RequestCallBack callback) {
-        new Thread(() -> {
-            api.sendMessage(MyApplication.context, currentChatId, message, new RequestCallBack() {
-                // success! update contact list, notifying caller with "success"
-                @Override
-                public void onSuccess() {
-                    updateMessagesList();
-                    callback.onSuccess();
-                }
-                // notifying caller with "failure"
-                @Override
-                public void onFailure(String error) {
-                    callback.onFailure(error);
-                }
-            });
-        }).start();
+        new Thread(() -> api.sendMessage(this.context, currentChatId, message, new RequestCallBack() {
+            // success! update contact list, notifying caller with "success"
+            @Override
+            public void onSuccess() {
+                updateMessagesList();
+                callback.onSuccess();
+            }
+            // notifying caller with "failure"
+            @Override
+            public void onFailure(String error) {
+                callback.onFailure(error);
+            }
+        })).start();
     }
 
 
@@ -80,21 +78,18 @@ public class ChatsRepository {
 
         public MessagesListData() {
             super();
-            setValue(new LinkedList<>());
+            setValue(messageDao.getChat(currentChatId));
         }
 
         @Override
         public void onActive() {
 
-            new Thread(() -> {
-                api.getMessages(context, currentChatId, currentUsername, new RequestCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        updateMessagesList();
-                    }
-                });
-
-            }).start();
+            new Thread(() -> api.getMessages(context, currentChatId, currentUsername, new RequestCallBack() {
+                @Override
+                public void onSuccess() {
+                    updateMessagesList();
+                }
+            })).start();
         }
     }
 

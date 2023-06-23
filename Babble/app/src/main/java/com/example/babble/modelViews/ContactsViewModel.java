@@ -1,13 +1,14 @@
-package com.example.babble.contacts;
+package com.example.babble.modelViews;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.babble.registeration.RequestCallBack;
+import com.example.babble.entities.Contact;
+import com.example.babble.utilities.RequestCallBack;
+import com.example.babble.repositories.ContactsRepository;
 
 import java.util.List;
 

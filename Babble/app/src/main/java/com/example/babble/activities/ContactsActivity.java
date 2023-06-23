@@ -1,26 +1,21 @@
-package com.example.babble.contacts;
+package com.example.babble.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
 
-import com.example.babble.AppDB;
 import com.example.babble.R;
-import com.example.babble.SettingsActivity;
-import com.example.babble.chats.ChatActivity;
+import com.example.babble.entities.Contact;
+import com.example.babble.adapters.ContactsAdapter;
+import com.example.babble.modelViews.ContactsViewModel;
 import com.example.babble.databinding.ActivityContactsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
 
@@ -30,6 +25,8 @@ public class ContactsActivity extends AppCompatActivity {
 
     private ContactsViewModel contactsViewModel;
 
+    private static final int SETTINGS_REQUEST_CODE = 1;
+    private static final int RESULT_LOGOUT = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,10 +76,23 @@ public class ContactsActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         if (itemId == R.id.action_settings) {
             Intent intent = new Intent(ContactsActivity.this, SettingsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, SETTINGS_REQUEST_CODE);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SETTINGS_REQUEST_CODE) {
+            if (resultCode == RESULT_LOGOUT) {
+                // Finish the current activity (ContactsActivity)
+                Intent i = new Intent(ContactsActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.babble;
+package com.example.babble.utilities;
 
 import java.text.DateFormat;
 import java.text.ParseException;

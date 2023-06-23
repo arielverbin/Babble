@@ -1,4 +1,4 @@
-package com.example.babble.chats;
+package com.example.babble.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.babble.R;
+import com.example.babble.entities.Message;
 
 import java.util.LinkedList;
 import java.util.List;

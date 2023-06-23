@@ -1,7 +1,8 @@
-package com.example.babble.registeration;
+package com.example.babble.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,11 +20,17 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.example.babble.API.UserAPI;
-import com.example.babble.contacts.ContactsActivity;
+import com.example.babble.AppDB;
+import com.example.babble.R;
 import com.example.babble.databinding.ActivityRegisterBinding;
+import com.example.babble.entities.Preference;
+import com.example.babble.entities.PreferenceDao;
+import com.example.babble.utilities.RequestCallBack;
+import com.example.babble.serverObjects.User;
 
 public class RegisterActivity extends AppCompatActivity {
-    private String base64Image;
+    private String base64DataUri;
+    private PreferenceDao preferenceDao;
     private ActivityRegisterBinding binding;
     private static final int PICK_IMAGE = 1;
 
@@ -31,8 +39,23 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
-
         setContentView(binding.getRoot());
+
+        // create a preference dao instance.
+        AppDB db = Room.databaseBuilder(RegisterActivity.this, AppDB.class, "AppDB")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+        preferenceDao = db.preferenceDao();
+
+        // initialize the text in the server url input.
+        EditText serverUrlEdit = binding.serverUrlInput;
+        if(preferenceDao.get("serverUrl") == null) { //initial entrance to the app!
+            serverUrlEdit.setText(RegisterActivity.this.getString(R.string.BaseUrl));
+        } else {
+            serverUrlEdit.setText(preferenceDao.get("serverUrl"));
+        }
+
 
         // Disable the actionbar.
         if (getSupportActionBar() != null)
@@ -40,11 +63,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         TextView loginLink = binding.loginLink;
 
+        //'already registered' button.
         loginLink.setOnClickListener(v -> {
             Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
+            finish();
         });
-
+        // photo selection button.
         Button selectPhotoButton = binding.selectPhotoButton;
         selectPhotoButton.setOnClickListener(v -> {
             Intent intent = new Intent();
@@ -53,48 +78,55 @@ public class RegisterActivity extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
         });
 
-        Button loginBtn = binding.btnRegister;
+        // register button.
+        Button btnRegister = binding.btnRegister;
+        btnRegister.setOnClickListener(v -> handleRegister());
+    }
 
-        loginBtn.setOnClickListener(v -> {
-            TextView errors = binding.errors;
 
-            String username = binding.usernameInput.getText().toString();
-            String displayName = binding.nameInput.getText().toString();
-            String password = binding.passwordInput.getText().toString();
-            String confirmPassword = binding.confirmPasswordInput.getText().toString();
-            Drawable photoPreview = binding.photoPreview.getDrawable();
+    private void handleRegister() {
+        TextView errors = binding.errors;
 
-            String errorMsg = produceErrorMsg(displayName, username,
-                    password, confirmPassword,photoPreview);
+        String username = binding.usernameInput.getText().toString();
+        String displayName = binding.nameInput.getText().toString();
+        String password = binding.passwordInput.getText().toString();
+        String confirmPassword = binding.confirmPasswordInput.getText().toString();
+        Drawable photoPreview = binding.photoPreview.getDrawable();
+        EditText serverUrlInput = binding.serverUrlInput;
 
-            if (!errorMsg.isEmpty()) {
-                CardView errorCard = binding.errorCard;
-                errorCard.setVisibility(View.VISIBLE);
-                errors.setText(errorMsg);
-            } else {
-                User user = new User(username, displayName,
-                        password, this.base64Image);
-                UserAPI userAPI = new UserAPI();
-                userAPI.post(user, RegisterActivity.this, new RequestCallBack() {
+        preferenceDao.set(new Preference("serverUrl", serverUrlInput.getText().toString()));
 
-                    // fail signing up - display error message.
-                    @Override
-                    public void onFailure(String error) {
-                        TextView errors = binding.errors;
-                        CardView errorCard = binding.errorCard;
-                        errorCard.setVisibility(View.VISIBLE);
-                        errors.setText(error);
-                    }
+        String errorMsg = produceErrorMsg(displayName, username,
+                password, confirmPassword,photoPreview);
 
-                    // success! starting the contacts activity.
-                    @Override
-                    public void onSuccess() {
-                        Intent intent = new Intent(RegisterActivity.this, ContactsActivity.class);
-                        startActivity(intent);
-                    }
-                });
-            }
-        });
+        if (!errorMsg.isEmpty()) {
+            CardView errorCard = binding.errorCard;
+            errorCard.setVisibility(View.VISIBLE);
+            errors.setText(errorMsg);
+        } else {
+            User user = new User(username, displayName,
+                    password, this.base64DataUri);
+            UserAPI userAPI = new UserAPI(RegisterActivity.this);
+            userAPI.post(user, RegisterActivity.this, new RequestCallBack() {
+
+                // fail signing up - display error message.
+                @Override
+                public void onFailure(String error) {
+                    TextView errors = binding.errors;
+                    CardView errorCard = binding.errorCard;
+                    errorCard.setVisibility(View.VISIBLE);
+                    errors.setText(error);
+                }
+
+                // success! starting the contacts activity.
+                @Override
+                public void onSuccess() {
+                    Intent intent = new Intent(RegisterActivity.this, ContactsActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -143,10 +175,9 @@ public class RegisterActivity extends AppCompatActivity {
             inputStream.close();
 
             // Encode the image byte array to Base64
-            this.base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-            // Perform any necessary operations with the base64Image
-            // (e.g., save it to a location or send it to a server)
+            String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            String mimeType = getContentResolver().getType(photoUri);
+            this.base64DataUri = "data:" + mimeType + ";base64," + base64Image;
 
             // Display the photo in an ImageView
             ImageView photoPreview = binding.photoPreview; // Replace with your ImageView's ID

@@ -1,9 +1,9 @@
-package com.example.babble.chats;
+package com.example.babble.entities;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.babble.DateGenerator;
+import com.example.babble.utilities.DateGenerator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

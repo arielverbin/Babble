@@ -1,9 +1,8 @@
-package com.example.babble.contacts;
+package com.example.babble.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.babble.R;
+import com.example.babble.entities.Contact;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 

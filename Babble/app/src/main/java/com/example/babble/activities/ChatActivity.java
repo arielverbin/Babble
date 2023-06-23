@@ -1,4 +1,4 @@
-package com.example.babble.chats;
+package com.example.babble.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -13,21 +13,25 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
-import com.example.babble.DateGenerator;
-import com.example.babble.MyApplication;
-import com.example.babble.R;
-import com.example.babble.contacts.Contact;
-import com.example.babble.contacts.ContactsViewModel;
+import com.example.babble.AppDB;
 import com.example.babble.databinding.ActivityChatBinding;
-import com.example.babble.registeration.RequestCallBack;
+import com.example.babble.utilities.DateGenerator;
+import com.example.babble.R;
+import com.example.babble.modelViews.ChatsViewModel;
+import com.example.babble.entities.Message;
+import com.example.babble.adapters.MessageListAdapter;
+import com.example.babble.entities.Contact;
+import com.example.babble.modelViews.ContactsViewModel;
+import com.example.babble.entities.PreferenceDao;
+import com.example.babble.utilities.RequestCallBack;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +40,8 @@ import java.util.List;
 public class ChatActivity extends AppCompatActivity {
 
     private ActivityChatBinding binding;
+
+    private PreferenceDao preferenceDao;
 
     private ChatsViewModel chatsViewModel;
     private ContactsViewModel contactsViewModel;
@@ -51,6 +57,13 @@ public class ChatActivity extends AppCompatActivity {
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        AppDB db = Room.databaseBuilder(ChatActivity.this, AppDB.class, "AppDB")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+
+        preferenceDao = db.preferenceDao();
+
         // Receive current chat id, given by the ContactsActivity.
         Intent intent = getIntent();
         String chatIdString = intent.getStringExtra("chatId");
@@ -62,7 +75,7 @@ public class ChatActivity extends AppCompatActivity {
         contactsViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
         chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         // set current chat id and current username to view model.
-        chatsViewModel.setChat(currentChatId, MyApplication.getUsername());
+        chatsViewModel.setChat(currentChatId, preferenceDao.get("username"));
 
         handleContact();
 

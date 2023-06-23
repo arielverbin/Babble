@@ -1,16 +1,17 @@
-package com.example.babble.contacts;
+package com.example.babble.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.babble.R;
+import com.example.babble.entities.Contact;
+import com.example.babble.modelViews.ContactsViewModel;
 import com.example.babble.databinding.ActivityAddContactBinding;
-import com.example.babble.registeration.RequestCallBack;
+import com.example.babble.utilities.RequestCallBack;
 
 public class AddContactActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.babble.chats;
+package com.example.babble.entities;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -31,6 +31,9 @@ public interface MessageDao {
 
     @Query("DELETE FROM message WHERE chatId = :chatId")
     void clearChat(String chatId);
+
+    @Query("DELETE FROM message")
+    void clearAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Message> messages);
