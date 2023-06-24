@@ -1,5 +1,7 @@
 package com.example.babble.activities;
 
+import static android.webkit.URLUtil.isValidUrl;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.room.Room;
@@ -8,6 +10,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -61,6 +65,10 @@ public class RegisterActivity extends AppCompatActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().hide();
 
+        // add filer to username input
+        EditText usernameInput = binding.usernameInput;
+        usernameInput.setFilters(new InputFilter[]{new UsernameFilter()});
+
         TextView loginLink = binding.loginLink;
 
         //'already registered' button.
@@ -86,21 +94,26 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void handleRegister() {
         TextView errors = binding.errors;
+        CardView errorCard = binding.errorCard;
 
         String username = binding.usernameInput.getText().toString();
         String displayName = binding.nameInput.getText().toString();
         String password = binding.passwordInput.getText().toString();
         String confirmPassword = binding.confirmPasswordInput.getText().toString();
         Drawable photoPreview = binding.photoPreview.getDrawable();
-        EditText serverUrlInput = binding.serverUrlInput;
+        String serverUrlInput = binding.serverUrlInput.getText().toString();
 
-        preferenceDao.set(new Preference("serverUrl", serverUrlInput.getText().toString()));
+        if(isValidUrl(serverUrlInput)) {
+            preferenceDao.set(new Preference("serverUrl", serverUrlInput));
+        } else {
+            errorCard.setVisibility(View.VISIBLE);
+            errors.setText(R.string.invalid_server_address);
+        }
 
         String errorMsg = produceErrorMsg(displayName, username,
                 password, confirmPassword,photoPreview);
 
         if (!errorMsg.isEmpty()) {
-            CardView errorCard = binding.errorCard;
             errorCard.setVisibility(View.VISIBLE);
             errors.setText(errorMsg);
         } else {
@@ -184,6 +197,28 @@ public class RegisterActivity extends AppCompatActivity {
             photoPreview.setImageURI(photoUri);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static class UsernameFilter implements InputFilter {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end,
+                                   Spanned dest, int dstart, int dend) {
+            StringBuilder filteredStringBuilder = new StringBuilder();
+
+            // Iterate through each character in the input
+            for (int i = start; i < end; i++) {
+                char currentChar = source.charAt(i);
+
+                // Check if the character is a lowercase letter (a-z), ".", or "_"
+                if (Character.isLetter(currentChar) || currentChar == '.' || currentChar == '_') {
+                    filteredStringBuilder.append((currentChar + "").toLowerCase());
+                }
+            }
+
+            // Return the filtered input
+            return filteredStringBuilder.toString();
         }
     }
 

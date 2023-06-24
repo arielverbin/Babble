@@ -38,7 +38,7 @@
     <string name="Send">Send</string>
     <string name="backtocontactslist">backToContactsList</string>
     <string name="name_of_user">Name of User</string>
-    <string name="enter_message">Enter Message...</string>
+    <string name="enter_message">Enter Message…</string>
     <string name="sendbtn">sendBTN</string>
     <string name="no_previous_messages">No Previous Messages.</string>
     <string name="noMessages">Looks like there aren\'t any messages yet.</string>
@@ -46,6 +46,7 @@
 
     <string name="BaseUrl">http://10.0.2.2:5001/api/</string>
     <string name="error_title">Error Reaching Server</string>
-    <string name="ok">ok</string>
+    <string name="ok">OK</string>
     <string name="all_fields_are_required">All fields are required.</string>
+    <string name="invalid_server_address">Invalid server address.</string>
 </resources>

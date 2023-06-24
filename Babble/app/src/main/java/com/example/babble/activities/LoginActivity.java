@@ -1,5 +1,7 @@
 package com.example.babble.activities;
 
+import static android.webkit.URLUtil.isValidUrl;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -70,17 +72,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void handleLogin() {
+        TextView errors = binding.errors;
+        CardView errorCard = binding.errorCard;
+
         EditText usernameInput = binding.usernameInput;
         EditText passwordInput = binding.passwordInput;
         EditText serverUrlInput = binding.serverUrlInput;
 
+        if(isValidUrl(serverUrlInput.getText().toString())) {
+            preferenceDao.set(new Preference("serverUrl", serverUrlInput.getText().toString()));
+        } else {
+            errorCard.setVisibility(View.VISIBLE);
+            errors.setText(R.string.invalid_server_address);
+            return;
+        }
         preferenceDao.set(new Preference("serverUrl", serverUrlInput.getText().toString()));
 
 
         if(usernameInput.getText().toString().equals("") ||
                 passwordInput.getText().toString().equals("")) {
-            TextView errors = binding.errors;
-            CardView errorCard = binding.errorCard;
+
             errorCard.setVisibility(View.VISIBLE);
             errors.setText(R.string.all_fields_are_required);
             return;
