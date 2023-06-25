@@ -58,7 +58,7 @@ To run the Babble website locally, follow these steps:
 
 2. Open a new terminal window, and navigate to the repository. Then, enter the *server* folder.
 3. Make sure that you have installed all required dependencies: `npm i express cors body-parser mongoose custom-env socket.io`, `npm install firebase`
-4. Run the server using `npm test`, (or `export NODE_ENV=test && node app.js` for macOS/Linux, `set NODE_ENV=test && node app.js` for Windows).
+4. Run the server using `npm test`, (or `export NODE_ENV=test && node app.js` for macOS/Linux, `SET NODE_ENV=test && node app.js` for Windows).
 5. The server should be running.
 
 ## Getting Started - Android Client
