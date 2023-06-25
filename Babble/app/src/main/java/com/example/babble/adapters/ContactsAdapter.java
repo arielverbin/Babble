@@ -1,5 +1,5 @@
 package com.example.babble.adapters;
-
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsAdapter extends BaseAdapter {
-
     private final List<Contact> contacts;
 
     private static class ViewHolder {
@@ -26,6 +25,9 @@ public class ContactsAdapter extends BaseAdapter {
         TextView timeChattedTextView;
         ImageView profileImageView;
     }
+
+    private static final int VIEW_TYPE_CONTACT = 0;
+    private static final int VIEW_TYPE_DELETED_CONTACT = 1;
 
     public ContactsAdapter() {
         this.contacts = new ArrayList<>();
@@ -55,11 +57,30 @@ public class ContactsAdapter extends BaseAdapter {
     }
 
     @Override
+    public int getItemViewType(int position) {
+        Contact contact = contacts.get(position);
+        return contact.getWasDeleted() ? VIEW_TYPE_DELETED_CONTACT : VIEW_TYPE_CONTACT;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
+        int viewType = getItemViewType(position);
+
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.contact_layout, parent, false);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+            if (viewType == VIEW_TYPE_DELETED_CONTACT) {
+                convertView = inflater.inflate(R.layout.deleted_contact_layout, parent, false);
+            } else {
+                convertView = inflater.inflate(R.layout.contact_layout, parent, false);
+            }
 
             viewHolder = new ViewHolder();
             viewHolder.nameTextView = convertView.findViewById(R.id.contactName);
@@ -75,7 +96,12 @@ public class ContactsAdapter extends BaseAdapter {
         Contact contact = contacts.get(position);
         String name = contact.getDisplayName();
         viewHolder.nameTextView.setText(name);
-        viewHolder.lastMessageTextView.setText(contact.getLastMessage());
+        if(viewType == VIEW_TYPE_DELETED_CONTACT) {
+            viewHolder.lastMessageTextView.setText(R.string.this_chat_deleted);
+
+        } else {
+            viewHolder.lastMessageTextView.setText(contact.getLastMessage());
+        }
         viewHolder.timeChattedTextView.setText(contact.getTimeChatted());
 
         String base64ProfilePic = contact.getProfilePicture();
@@ -89,5 +115,4 @@ public class ContactsAdapter extends BaseAdapter {
 
         return convertView;
     }
-
 }

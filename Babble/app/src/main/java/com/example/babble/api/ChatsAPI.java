@@ -10,11 +10,14 @@ import com.example.babble.AppDB;
 import com.example.babble.entities.Message;
 import com.example.babble.entities.MessageDao;
 import com.example.babble.serverObjects.ServerMessage;
+import com.example.babble.services.WebServiceAPI;
 import com.example.babble.utilities.RequestCallBack;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,12 +77,13 @@ public class ChatsAPI {
                         messageDao.insertAll(chatMessages);
                         callback.onSuccess();
 
-                    } else {
-                        callback.onFailure("Error fetching messages from server.");
                     }
+                } else if(response.code() == 404) {
+                    callback.onFailure("Chat was deleted.");
+                } else {
+                    callback.onFailure("Error fetching messages from server (code: "
+                            + response.code() + ")");
                 }
-                callback.onFailure("Error fetching messages from server (code: "
-                        + response.code() + ")");
             }
 
             @Override
@@ -105,11 +109,12 @@ public class ChatsAPI {
                 if (response.code() == 200) {
                     messageDao.insert(message);
                     callback.onSuccess();
+                } else if (response.code() == 404) {
+                    callback.onFailure("This chat was deleted.");
                 } else {
                     callback.onFailure("Could not send message (code: "
-                            + response.code() + ")" );
+                            + response.code() + ")");
                 }
-
             }
 
             @Override

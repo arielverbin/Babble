@@ -2,6 +2,7 @@ package com.example.babble.repositories;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -67,6 +68,13 @@ public class ChatsRepository {
         })).start();
     }
 
+    public void handleMessageNotification(Message message, RequestCallBack callBack) {
+        new Thread(() -> {
+            messageDao.insert(message);
+            updateMessagesList();
+            callBack.onSuccess();
+        }).start();
+    }
 
     private void updateMessagesList() {
         List<Message> messages = messageDao.getChat(currentChatId);
@@ -88,6 +96,11 @@ public class ChatsRepository {
                 @Override
                 public void onSuccess() {
                     updateMessagesList();
+                }
+                @Override
+                public void onFailure(String error){
+                    Toast.makeText(context, error,
+                            Toast.LENGTH_LONG).show();
                 }
             })).start();
         }

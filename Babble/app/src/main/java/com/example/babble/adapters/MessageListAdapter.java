@@ -59,12 +59,16 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     }
 
     public void addMessage(Message message) {
-        messageList.add(message);
-        notifyItemInserted(messageList.size() - 1);
-
-        if (getItemCount() == 2) {
+        if (getItemCount() == 1) {
             messageList.get(0).setMsg("No previous messages.");
-            notifyItemChanged(0);
+            messageList.add(message);
+        } else {
+            Message lastMessage = messageList.get(messageList.size() - 1);
+            if(!lastMessage.getDaySent().equals(message.getDaySent())) {
+                messageList.add(new Message(message.getDaySent(),
+                        message.getChatId(), "", "", true).convertToWatermark());
+                messageList.add(new Message(message.getMsg() + "ahahahha", message.getChatId(), message.getCreated(), message.getTimeSentExtended(), message.isSent()));
+            }
         }
     }
 

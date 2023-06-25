@@ -3,6 +3,7 @@ package com.example.babble.entities;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -18,6 +19,9 @@ public interface ContactDao {
 
     @Query("SELECT * FROM contact WHERE username = :username LIMIT 1")
     Contact getByUsername(String username);
+
+    @Query("SELECT * FROM contact WHERE username = :username AND wasDeleted = 0 LIMIT 1")
+    Contact getExistingByUsername(String username);
 
     @Insert
     void insert(Contact contact);
@@ -37,6 +41,12 @@ public interface ContactDao {
     @Query("DELETE FROM contact")
     void clear();
 
-    @Insert
+    @Query("UPDATE contact SET wasDeleted = 1 WHERE id = :contactId")
+    void markAsDelete(String contactId);
+
+    @Query("UPDATE contact SET wasDeleted = 1")
+    void markAllAsDeleted();
+
+   @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Contact> contacts);
 }

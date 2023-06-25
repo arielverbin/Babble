@@ -1,6 +1,7 @@
 package com.example.babble.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,11 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.babble.R;
 import com.example.babble.entities.Contact;
 import com.example.babble.adapters.ContactsAdapter;
+import com.example.babble.entities.Message;
 import com.example.babble.modelViews.ContactsViewModel;
 import com.example.babble.databinding.ActivityContactsBinding;
+import com.example.babble.services.FirebaseService;
+import com.example.babble.services.NotificationPermissionHandler;
+import com.example.babble.utilities.FirebaseMessagingCallback;
+import com.example.babble.utilities.RequestCallBack;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.FirebaseApp;
 
-public class ContactsActivity extends AppCompatActivity {
+public class ContactsActivity extends AppCompatActivity implements FirebaseMessagingCallback {
 
     private ActivityContactsBinding binding;
     private ListView contactsListView;
@@ -44,6 +51,8 @@ public class ContactsActivity extends AppCompatActivity {
         contactsListView = binding.contactList;
         contactsListView.setAdapter(contactsAdapter);
 
+        handleFCM();
+
         // observe for initial creation - fetch all contacts.
         contactsViewModel.getAllContacts().observe(this, contacts -> {
             contactsAdapter.setContacts(contacts);
@@ -63,6 +72,27 @@ public class ContactsActivity extends AppCompatActivity {
             Intent intent = new Intent(ContactsActivity.this, AddContactActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void handleFCM() {
+        // Now - the chat activity behaves as a listener for notifications.
+        FirebaseService.setMessagingCallback(this);
+
+        // notification firebase handling
+        FirebaseApp.initializeApp(this);
+
+        NotificationPermissionHandler notificationPermissionHandler = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            notificationPermissionHandler = new NotificationPermissionHandler(this);
+        }
+
+        // Check permission and request if necessary
+        if (notificationPermissionHandler != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                notificationPermissionHandler.checkAndRequestPermission();
+            }
+        }
     }
 
     @Override
@@ -98,8 +128,17 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Now - the chat activity behaves as a listener for notifications.
+        FirebaseService.setMessagingCallback(this);
+
         // observe for resuming the activity (after exit from ChatActivity).
         contactsViewModel.getAllContacts().observe(this, contacts -> contactsAdapter.setContacts(contacts));
+    }
+
+    @Override
+    public void updateUI(Message message, String senderUsername) {
+        // observe for resuming the activity (after exit from ChatActivity).
+        contactsViewModel.reloadContacts();
     }
 
 }

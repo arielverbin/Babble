@@ -45,4 +45,8 @@ public class ChatsViewModel extends AndroidViewModel {
         chatsRepository.insertMessage(message, callBack);
     }
 
+
+    public void handleMessageNotification(Message message, RequestCallBack callBack) {
+        chatsRepository.handleMessageNotification(message, callBack);
+    }
 }

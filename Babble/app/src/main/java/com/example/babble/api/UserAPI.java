@@ -10,6 +10,7 @@ import com.example.babble.AppDB;
 import com.example.babble.serverObjects.UserDataToSettings;
 import com.example.babble.entities.Preference;
 import com.example.babble.entities.PreferenceDao;
+import com.example.babble.services.WebServiceAPI;
 import com.example.babble.utilities.RequestCallBack;
 import com.example.babble.serverObjects.User;
 import com.google.gson.Gson;
@@ -63,6 +64,8 @@ public class UserAPI {
                 } else {
                     if(response.code() == 404) {
                         callback.onFailure("Incorrect password or username.");
+                    } else if(response.code() == 409){
+                        callback.onFailure("Another device is currently logged in to this account. Please log out from that device and try again.");
                     } else {
                         callback.onFailure("Error logging in (code: " + response.code() + ")");
                     }

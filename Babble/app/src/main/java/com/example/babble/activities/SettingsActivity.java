@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.babble.API.FirebaseAPI;
 import com.example.babble.API.UserAPI;
 import com.example.babble.AppDB;
 import com.example.babble.R;
@@ -165,6 +166,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void handleLogOut() {
+        new FirebaseAPI(SettingsActivity.this).removeFirebaseToken(new RequestCallBack() {});
+
         // clear all dao:
         // the user wouldn't want their data still on their
         // phone even though they logged out.
@@ -176,7 +179,6 @@ public class SettingsActivity extends AppCompatActivity {
         // clear user details and token.
         preferenceDao.clear();
         // Set the result code to indicate a successful logout
-
         setResult(RESULT_LOGOUT);
         finish();
     }

@@ -2,6 +2,7 @@ package com.example.babble.repositories;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -50,6 +51,10 @@ public class ContactsRepository {
         return contactDao.getByUsername(username);
     }
 
+    public Contact getExistingByUsername(String username) {
+        return contactDao.getExistingByUsername(username);
+    }
+
     public void insertContact(String username, RequestCallBack callback) {
         new Thread(() -> api.addContact(this.context, username, new RequestCallBack() {
             // success! update contact list, notifying caller with "success"
@@ -92,10 +97,30 @@ public class ContactsRepository {
 
     public void updateLastMessage(String contactId, String lastMes, String timeChatted, RequestCallBack callBack) {
         new Thread(() -> {
-            contactDao.setLastMessage(contactId, lastMes, timeChatted);
-            updateContactList();
-            callBack.onSuccess();
+            Contact toUpdate = contactDao.get(contactId);
+            if(toUpdate != null) {
+                contactDao.setLastMessage(contactId, lastMes, timeChatted);
+                updateContactList();
+                callBack.onSuccess();
+            } else { // contact not in list, fetch again!.
+                api.getContacts(context, new RequestCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        updateContactList();
+                        callBack.onSuccess();
+                    }
+                });
+            }
         }).start();
+    }
+
+    public void reload() {
+        new Thread(() -> api.getContacts(context, new RequestCallBack() {
+            @Override
+            public void onSuccess() {
+                updateContactList();
+            }
+        })).start();
     }
 
     private void updateContactList() {
