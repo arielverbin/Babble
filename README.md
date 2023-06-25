@@ -54,7 +54,7 @@ Allows a user to change some settings of the app(like night mode...)
 
 To run the Babble website locally, follow these steps:
 
-1. Clone the repository: `git clone (https://github.com/arielverbin/Babble.git)`
+1. Clone the repository: `git clone https://github.com/arielverbin/Babble.git`
 
 2. Open a new terminal window, and navigate to the repository. Then, enter the *server* folder.
 3. Make sure that you have installed all required dependencies: `npm i express cors body-parser mongoose custom-env socket.io`, `npm install firebase`
