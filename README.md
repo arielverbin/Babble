@@ -12,7 +12,7 @@ The app consists of the following screens:
 ### Login Screen
 
 The login screen allows users to authenticate and log into their Babble account. Users need to enter their username and password to access the chat system.
-![img.png](img.png)
+<img src="./login.png" alt="loginScreen" width="77.8" height="160">
 ### Registration Screen
 
 The registration screen allows new users to create an account on the Babble system. Users need to provide their desired username, password, email, and other required information to register.
@@ -62,7 +62,7 @@ We used WebSocket technology in our application to provide real-time updates for
 ## Requirements
 
 - Android Studio
-- Android SDK version 24 or higher
+- Android SDK version 21 or higher (minSdk 21)
 
 ## Dependencies
 
