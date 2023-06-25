@@ -1,4 +1,4 @@
-# Babble - 4 Assignment - Android Client <img src="./babble/src/favicon.ico" alt="Logo" width="30" height="auto">
+# Babble - 4 Assignment - Android Client ![favicon](https://github.com/arielverbin/Babble/assets/106393592/19955a72-00cd-442b-abc4-8f1a7da1bc11)
 
 The Babble Android Client is an Android application that allows users to chat in real-time using the Babble system. The app provides a seamless and synchronized communication experience, enabling users to send messages, create and delete chats, update their profile picture and display name, and attach files to messages.
 ## About the Name 'Babble'
@@ -21,7 +21,7 @@ The login screen allows users to authenticate and log into their Babble account.
 
 The registration screen allows new users to create an account on the Babble system. Users need to provide their desired username, password, email, and other required information to register.
 
-![register](https://github.com/arielverbin/Babble/assets/106393592/c9337384-665f-4e45-ae58-f6ad364fbcd0)
+![register](https://github.com/arielverbin/Babble/assets/106393592/f9d4fcc3-6979-4a1c-9d9f-13b8c2ac7cce)
 
 
 ### Contacts Screen
@@ -41,7 +41,7 @@ The single chat screen displays the messages exchanged in a specific chat. Users
 
 The add contact screen allows users to search for and add new contacts to their contact list. Users can enter the username or email of the person they want to add as a contact.
 
-![addChat](https://github.com/arielverbin/Babble/assets/106393592/93cfdbc9-f723-4adc-9716-eb534f05328c)
+![addChat](https://github.com/arielverbin/Babble/assets/106393592/37955b73-ce71-4274-b01f-53b30f9e90c4)
 
 ### Settings
 
