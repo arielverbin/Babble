@@ -1,4 +1,4 @@
-# Babble - 4 Assignment - Android Client ![favicon](https://github.com/arielverbin/Babble/assets/106393592/19955a72-00cd-442b-abc4-8f1a7da1bc11)
+# Babble - 4 Assignment - Android Client
 
 The Babble Android Client is an Android application that allows users to chat in real-time using the Babble system. The app provides a seamless and synchronized communication experience, enabling users to send messages, create and delete chats, update their profile picture and display name, and attach files to messages.
 ## About the Name 'Babble'
