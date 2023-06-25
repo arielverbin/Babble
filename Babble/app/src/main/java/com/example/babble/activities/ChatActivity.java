@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,8 @@ import androidx.room.Room;
 
 import com.example.babble.AppDB;
 import com.example.babble.databinding.ActivityChatBinding;
+import com.example.babble.services.FirebaseService;
+import com.example.babble.services.NotificationPermissionHandler;
 import com.example.babble.utilities.DateGenerator;
 import com.example.babble.R;
 import com.example.babble.modelViews.ChatsViewModel;
@@ -31,17 +35,17 @@ import com.example.babble.adapters.MessageListAdapter;
 import com.example.babble.entities.Contact;
 import com.example.babble.modelViews.ContactsViewModel;
 import com.example.babble.entities.PreferenceDao;
+import com.example.babble.utilities.FirebaseMessagingCallback;
 import com.example.babble.utilities.RequestCallBack;
+import com.google.firebase.FirebaseApp;
 
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements FirebaseMessagingCallback {
 
     private ActivityChatBinding binding;
-
-    private PreferenceDao preferenceDao;
 
     private ChatsViewModel chatsViewModel;
     private ContactsViewModel contactsViewModel;
@@ -62,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
                 .fallbackToDestructiveMigration()
                 .build();
 
-        preferenceDao = db.preferenceDao();
+        PreferenceDao preferenceDao = db.preferenceDao();
 
         // Receive current chat id, given by the ContactsActivity.
         Intent intent = getIntent();
@@ -70,6 +74,8 @@ public class ChatActivity extends AppCompatActivity {
         if (chatIdString != null) {
             currentChatId = chatIdString;
         } else finish();
+
+        handleFCM();
 
         // initialize the view models.
         contactsViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
@@ -82,6 +88,28 @@ public class ChatActivity extends AppCompatActivity {
         handleActionBar();
 
         handleSendMessage();
+
+    }
+
+    private void handleFCM() {
+        // Now - the chat activity behaves as a listener for notifications.
+        FirebaseService.setMessagingCallback(this);
+
+        // notification firebase handling
+        FirebaseApp.initializeApp(this);
+
+        NotificationPermissionHandler notificationPermissionHandler = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            notificationPermissionHandler = new NotificationPermissionHandler(this);
+        }
+
+        // Check permission and request if necessary
+        if (notificationPermissionHandler != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                notificationPermissionHandler.checkAndRequestPermission();
+            }
+        }
     }
 
     private void handleActionBar() {
@@ -171,7 +199,7 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                     chatsViewModel.getAllMessages().observe(ChatActivity.this, messages -> {
-                        if(messages.size() > 0) {
+                        if (messages.size() > 0) {
                             Message newMessage = messages.get(messages.size() - 1);
 
                             contactsViewModel.setLastMessage(currentChatId,
@@ -239,7 +267,7 @@ public class ChatActivity extends AppCompatActivity {
             return modifiedList;
         }
         // add "no previous messages" watermark.
-        modifiedList.add( new Message("No previous messages.",
+        modifiedList.add(new Message("No previous messages.",
                 currentChatId, "", "",
                 true).convertToWatermark());
 
@@ -249,7 +277,7 @@ public class ChatActivity extends AppCompatActivity {
         for (int i = 0; i < messageList.size() - 1; i++) {
             Message currentMessage = messageList.get(i);
             Message nextMessage = messageList.get(i + 1);
-            if(nextMessage == null) break;
+            if (nextMessage == null) break;
 
             modifiedList.add(currentMessage); // Add current message
 
@@ -263,5 +291,23 @@ public class ChatActivity extends AppCompatActivity {
 
         return modifiedList;
     }
+
+    // activated when a notification is sent.
+    @Override
+    public void updateUI(Message message, String senderUsername) {
+        Log.d("newMessageLol", "day: " +message.getDaySent() +", time: "+  message.getTimestamp());
+        if (message.getChatId().equals(currentChatId)) {
+            chatsViewModel.handleMessageNotification(message, new RequestCallBack() {});
+        }
+        // update contact's last message.
+        contactsViewModel.setLastMessage(currentChatId,
+                message.getMsg(),
+                message.getTimeSentExtended(),
+                // no need for handling error/success -
+                // not the end of the world if it fails.
+                new RequestCallBack() {
+                });
+    }
+
 
 }

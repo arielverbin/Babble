@@ -20,6 +20,7 @@ import com.example.babble.R;
 import com.example.babble.databinding.ActivityLoginBinding;
 import com.example.babble.entities.Preference;
 import com.example.babble.entities.PreferenceDao;
+import com.example.babble.services.FirebaseService;
 import com.example.babble.utilities.RequestCallBack;
 import com.example.babble.serverObjects.User;
 
@@ -114,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             // success! start contacts activity.
             @Override
             public void onSuccess() {
+                new FirebaseService().createNewToken(LoginActivity.this);
                 Intent intent = new Intent(LoginActivity.this, ContactsActivity.class);
                 startActivity(intent);
                 finish();

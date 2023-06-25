@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.cc6e0f49.css",
+    "main.js": "/static/js/main.57c0cda5.js",
+    "static/media/picture.png": "/static/media/picture.2def4022ec87f64a8050.png",
+    "static/media/homepage-pic.png": "/static/media/homepage-pic.bc320e7a473613cc7250.png",
+    "static/media/message-sent.mp3": "/static/media/message-sent.dff7420717e860b73701.mp3",
+    "static/media/favicon.ico": "/static/media/favicon.84e5ea9100aad84badc4.ico",
+    "static/media/settings.svg": "/static/media/settings.1eaa03f9ed5c16f10669.svg",
+    "index.html": "/index.html",
+    "static/media/settings-hover.svg": "/static/media/settings-hover.6031d8c7f41ed45f4782.svg",
+    "static/media/sound-on.svg": "/static/media/sound-on.ce7a4f4e19beb64f443f6263ae12f400.svg",
+    "static/media/delete-hover.svg": "/static/media/delete-hover.e9c266c32e03c2c563fc.svg",
+    "static/media/delete.svg": "/static/media/delete.768f9c5b2b3f410569c3.svg",
+    "static/media/deselect-file.svg": "/static/media/deselect-file.bebec47d2559a5fbd70f.svg",
+    "static/media/person-add.svg": "/static/media/person-add.63ed46c8b9d91fa55ae6.svg",
+    "static/media/sound-off.svg": "/static/media/sound-off.8578bc84347beb9b0cd42ad8804e16f0.svg",
+    "static/media/person-fill-add.svg": "/static/media/person-fill-add.ddfed630a9e5b8e92c5c.svg",
+    "static/media/attach-file-icon.svg": "/static/media/attach-file-icon.3c51e774afe947ce89a6.svg",
+    "static/media/send-icon.svg": "/static/media/send-icon.03955a04da613dc4eb24.svg",
+    "static/media/search.svg": "/static/media/search.a26b0417543e9925a990.svg",
+    "main.cc6e0f49.css.map": "/static/css/main.cc6e0f49.css.map",
+    "main.57c0cda5.js.map": "/static/js/main.57c0cda5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cc6e0f49.css",
+    "static/js/main.57c0cda5.js"
+  ]
+}

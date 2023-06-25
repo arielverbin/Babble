@@ -29,6 +29,7 @@ import com.example.babble.R;
 import com.example.babble.databinding.ActivityRegisterBinding;
 import com.example.babble.entities.Preference;
 import com.example.babble.entities.PreferenceDao;
+import com.example.babble.services.FirebaseService;
 import com.example.babble.utilities.RequestCallBack;
 import com.example.babble.serverObjects.User;
 
@@ -134,6 +135,7 @@ public class RegisterActivity extends AppCompatActivity {
                 // success! starting the contacts activity.
                 @Override
                 public void onSuccess() {
+                    new FirebaseService().createNewToken(RegisterActivity.this);
                     Intent intent = new Intent(RegisterActivity.this, ContactsActivity.class);
                     startActivity(intent);
                     finish();
@@ -212,7 +214,8 @@ public class RegisterActivity extends AppCompatActivity {
                 char currentChar = source.charAt(i);
 
                 // Check if the character is a lowercase letter (a-z), ".", or "_"
-                if (Character.isLetter(currentChar) || currentChar == '.' || currentChar == '_') {
+                if (Character.isLetter(currentChar) || currentChar == '.' || currentChar == '_' ||
+                    Character.isDigit(currentChar)) {
                     filteredStringBuilder.append((currentChar + "").toLowerCase());
                 }
             }

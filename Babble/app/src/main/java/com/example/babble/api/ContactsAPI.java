@@ -10,6 +10,7 @@ import com.example.babble.AppDB;
 import com.example.babble.entities.Contact;
 import com.example.babble.entities.ContactDao;
 import com.example.babble.serverObjects.ServerContact;
+import com.example.babble.services.WebServiceAPI;
 import com.example.babble.utilities.RequestCallBack;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -64,8 +65,9 @@ public class ContactsAPI {
                             contacts.add(serverContact.convertToContact());
                         }
                         // success! insert contacts and notify caller with success.
-                        dao.clear();
-                        dao.insertAll(contacts);
+                        //dao.clear();
+                        dao.markAllAsDeleted();
+                        dao.insertAll(contacts); //will un-mark "deleted" for still-existing chats.
                         callback.onSuccess();
 
             //rest of function is fail handling - notify caller with failure.
@@ -144,7 +146,7 @@ public class ContactsAPI {
             @Override
             public void onResponse(@NonNull Call<Void> call,
                                    @NonNull Response<Void> response) {
-                if (response.code() == 200) {
+                if (response.code() == 200 || response.code() == 404) {
                     // success! delete contact and notify caller with success.
                     dao.deleteById(id);
                     callBack.onSuccess();

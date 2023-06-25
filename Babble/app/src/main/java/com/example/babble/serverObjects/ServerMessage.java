@@ -1,5 +1,7 @@
 package com.example.babble.serverObjects;
 
+import android.util.Log;
+
 import com.example.babble.utilities.DateGenerator;
 import com.example.babble.entities.Message;
 
@@ -18,6 +20,7 @@ public class ServerMessage {
     }
 
     public Message convertToMessage(String username, String chatId) {
+        Log.d("thisIsTheHour", created + ",  " + DateGenerator.toHour(created) + ",  " + DateGenerator.toTimeDay(created));
         return new Message(
                 this.getContent(),
                 chatId,

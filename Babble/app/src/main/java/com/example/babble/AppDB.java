@@ -11,7 +11,7 @@ import com.example.babble.entities.ContactDao;
 import com.example.babble.entities.Preference;
 import com.example.babble.entities.PreferenceDao;
 
-@Database(entities = {Contact.class, Message.class, Preference.class}, version = 12)
+@Database(entities = {Contact.class, Message.class, Preference.class}, version = 13)
 public abstract class AppDB extends RoomDatabase {
     public abstract ContactDao contactDao();
     public abstract MessageDao messageDao();

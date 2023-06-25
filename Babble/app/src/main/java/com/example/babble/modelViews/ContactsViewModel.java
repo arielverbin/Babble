@@ -35,6 +35,10 @@ public class ContactsViewModel extends AndroidViewModel {
         return contactsRepository.getContactByUsername(username);
     }
 
+    public Contact getExistingByUsername(String username) {
+        return contactsRepository.getExistingByUsername(username);
+    }
+
     public void insertContact(String username, RequestCallBack callBack) {
         contactsRepository.insertContact(username, callBack);
     }
@@ -47,7 +51,23 @@ public class ContactsViewModel extends AndroidViewModel {
         contactsRepository.updateLastMessage(contactId, lastMes, timeChatted, callBack);
     }
 
+    public Contact findContactById(String id) {
+        List<Contact> contacts = allContacts.getValue();
+        if (contacts != null) {
+            for (Contact contact : contacts) {
+                if (contact.getId().equals(id)) {
+                    return contact;
+                }
+            }
+        }
+        return null; // Contact not found
+    }
+
     public void deleteContact(String userId, RequestCallBack callBack) {
         contactsRepository.deleteContact(userId, callBack);
+    }
+
+    public void reloadContacts() {
+        contactsRepository.reload();
     }
 }

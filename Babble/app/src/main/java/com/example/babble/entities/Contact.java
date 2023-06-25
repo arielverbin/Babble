@@ -16,6 +16,8 @@ public class Contact {
     private String lastMessage;
     private String timeChatted;
 
+    private boolean wasDeleted;
+
     public Contact(@NonNull String id, String username, String displayName, String profilePicture, String lastMessage, String timeChatted) {
         this.id = id;
         this.username = username;
@@ -23,6 +25,14 @@ public class Contact {
         this.profilePicture = profilePicture;
         this.lastMessage = lastMessage;
         this.timeChatted = timeChatted;
+    }
+
+    public void setWasDeleted(boolean deleted) {
+        this.wasDeleted = deleted;
+    }
+
+    public boolean getWasDeleted() {
+        return this.wasDeleted;
     }
 
     @NonNull

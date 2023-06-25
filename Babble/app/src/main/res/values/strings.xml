@@ -49,4 +49,5 @@
     <string name="ok">OK</string>
     <string name="all_fields_are_required">All fields are required.</string>
     <string name="invalid_server_address">Invalid server address.</string>
+    <string name="this_chat_deleted">This chat was deleted.</string>
 </resources>

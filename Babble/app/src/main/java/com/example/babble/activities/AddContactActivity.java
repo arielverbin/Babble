@@ -48,7 +48,7 @@ public class AddContactActivity extends AppCompatActivity {
             if (username.isEmpty()) return;
 
             // Error if the username already exists.
-            Contact existingContact = contactsViewModel.getContactByUsername(username);
+            Contact existingContact = contactsViewModel.getExistingByUsername(username);
             if(existingContact != null) {
                 TextView errorMsg = binding.errorMsg;
                 errorMsg.setText(R.string.username_already_exists);
