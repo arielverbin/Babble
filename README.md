@@ -1,11 +1,11 @@
 # Babble <img src="./babble-logo.ico" alt="Logo" width="30" height="auto">
 
-Babble is a chatting platform that allows users to chat in real-time. In this repository, we introduce the Android app version for out platform, along the existing website (See https://github.com/arielverbin/Babble3).
+Babble is a chatting platform that allows users to chat in real-time. In this repository, we introduce the Android app version for our platform, along the existing website (See https://github.com/arielverbin/Babble3).
 
 The app provides a seamless and synchronized communication experience, enabling users to send messages, create and delete chats, update their profile picture and display name.
 
 ### About the Name 'Babble'
-The name "Babble" reflects the concept of talking rapidly and continuously in a foolish, excited, or incomprehensible way. It also resonates with the playful nature of bubbles, which inspired the choice of logo for the website.
+The name "Babble" reflects the concept of talking rapidly and continuously in a foolish, excited, or incomprehensible way. It also resonates with the playful nature of bubbles, which inspired the choice of logo for the platform.
 
 ## Sending Messages
 Our app utilizes Firebase for real-time messaging and push notifications, ensuring instant communication and timely updates. With Firebase's seamless integration, users can enjoy a smooth and engaging chatting experience on their devices.
