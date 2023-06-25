@@ -1,54 +1,31 @@
-# Babble - 4 Assignment - Android Client
+# Babble <img src="./babble-logo.ico" alt="Logo" width="30" height="auto">
 
-The Babble Android Client is an Android application that allows users to chat in real-time using the Babble system. The app provides a seamless and synchronized communication experience, enabling users to send messages, create and delete chats, update their profile picture and display name.
-## About the Name 'Babble'
+Babble is a chatting platform that allows users to chat in real-time. In this repository, we introduce the Android app version for out platform, along the existing website (See https://github.com/arielverbin/Babble3).
 
+The app provides a seamless and synchronized communication experience, enabling users to send messages, create and delete chats, update their profile picture and display name.
+
+### About the Name 'Babble'
 The name "Babble" reflects the concept of talking rapidly and continuously in a foolish, excited, or incomprehensible way. It also resonates with the playful nature of bubbles, which inspired the choice of logo for the website.
 
-## Screens
+## Sending Messages
+Our app utilizes Firebase for real-time messaging and push notifications, ensuring instant communication and timely updates. With Firebase's seamless integration, users can enjoy a smooth and engaging chatting experience on their devices.
 
-The app consists of the following screens:
+## Settings
+Our app's settings screen provides users with a convenient way to personalize their chat experience. Users can modify their display name and profile picture, allowing them to customize their identity within the app. Additionally, the settings screen offers a choice between light and dark themes, enabling users to tailor the app's appearance to their preferences. Moreover, users have the flexibility to change the server address, granting them the freedom to connect to different chat servers based on their needs.
 
-### Login Screen
+## Our Activities
+These are some screenshots of our different screens.
 
-The login screen allows users to authenticate and log into their Babble account. Users need to enter their username and password to access the chat system.
+<div style="display: flex; flex-wrap: wrap;">
+  <img src="https://github.com/arielverbin/Babble/assets/106393592/b8ceed2b-f31c-40bb-9d5b-9f4611845470" alt="login" style="width: 13%; max-height: 100px; margin-right: 5px;">
+  <img src="https://github.com/arielverbin/Babble/assets/101435503/602a4f44-1c46-4163-b309-dc5d553d2888" alt="register" style="width: 13%; max-height: 100px; margin-right: 5px;">
+  <img src="https://github.com/arielverbin/Babble/assets/106393592/77766b0a-9998-4797-8f3d-20950f8bb4be" alt="chatsList" style="width: 13%; max-height: 100px; margin-right: 5px;">
+  <img src="https://github.com/arielverbin/Babble/assets/106393592/210cd1b4-bba0-4d17-a2ce-dcd9e0b224cc" alt="night-mode-chatList" style="width: 13%; max-height: 100px; margin-right: 5px;">
+  <img src="https://github.com/arielverbin/Babble/assets/106393592/d99b7db7-c543-4a2a-b969-f8d8fbca1bc7" alt="chat" style="width: 13%; max-height: 100px; margin-right: 5px;">
+  <img src="https://github.com/arielverbin/Babble/assets/106393592/37955b73-ce71-4274-b01f-53b30f9e90c4" alt="addChat" style="width: 13%; max-height: 100px; margin-right: 5px;">
+  <img src="https://github.com/arielverbin/Babble/assets/106393592/f751d33c-9272-4707-b4b5-5e8e09adca69" alt="settings" style="width: 13%; max-height: 100px; margin-right: 5px;">
+</div>
 
-![login](https://github.com/arielverbin/Babble/assets/106393592/b8ceed2b-f31c-40bb-9d5b-9f4611845470)
-
-
-
-### Registration Screen
-
-The registration screen allows new users to create an account on the Babble system. Users need to provide their desired username, password, email, and other required information to register.
-
-![register](https://github.com/arielverbin/Babble/assets/106393592/f9d4fcc3-6979-4a1c-9d9f-13b8c2ac7cce)
-
-
-### Contacts Screen
-
-The contacts screen displays a list of chats that the user is a part of. Each chat entry shows the name of the chat and the latest message received or sent in that chat. Users can select a chat from the list to open the single chat screen.
-
-![chatsList](https://github.com/arielverbin/Babble/assets/106393592/77766b0a-9998-4797-8f3d-20950f8bb4be) ![night-mode-chatList](https://github.com/arielverbin/Babble/assets/106393592/210cd1b4-bba0-4d17-a2ce-dcd9e0b224cc)
-
-### Single Chat Screen
-
-The single chat screen displays the messages exchanged in a specific chat. Users can send messages, view received messages.
-The screen also shows the profile pictures and display names of the chat participants.
-
-![chat](https://github.com/arielverbin/Babble/assets/106393592/d99b7db7-c543-4a2a-b969-f8d8fbca1bc7)
-
-
-### Add Contact Screen
-
-The add contact screen allows users to search for and add new contacts to their contact list. Users can enter the username or email of the person they want to add as a contact.
-
-![addChat](https://github.com/arielverbin/Babble/assets/106393592/37955b73-ce71-4274-b01f-53b30f9e90c4)
-
-### Settings
-
-Allows a user to change some settings of the app(like night mode...)
-
-![settings](https://github.com/arielverbin/Babble/assets/106393592/f751d33c-9272-4707-b4b5-5e8e09adca69)
 
 
 ## Getting Started - Server
@@ -56,11 +33,10 @@ Allows a user to change some settings of the app(like night mode...)
 To run the Babble website locally, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/arielverbin/Babble.git`
-
 2. Open a new terminal window, and navigate to the repository. Then, enter the *server* folder.
-3. Make sure that you have installed all required dependencies: `npm i express cors body-parser mongoose custom-env socket.io`, `npm install firebase`
-4. Run the server using `npm test`, (or `export NODE_ENV=test && node app.js` for macOS/Linux, `SET NODE_ENV=test && node app.js` for Windows).
-5. The server should be running.
+3. Make sure that you have installed all required dependencies: `npm i express cors body-parser mongoose custom-env socket.io firebase-admin path`
+5. Run the server using `npm test`, (or `export NODE_ENV=test && node app.js` for macOS/Linux, `SET NODE_ENV=test && node app.js` for Windows).
+6. The server should be running.
 
 ## Getting Started - Android Client
 
@@ -68,7 +44,7 @@ To run the Babble Android Client, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/arielverbin/Babble`
 2. Open the project in Android Studio.
-3. Build and run the app on an Android emulator or physical device.
+3. Build and run the app on an Android emulator.
 4. The Babble Android Client should be running, and you can now use the app to log in, register, and chat with other users.
 
 ## Requirements
@@ -76,24 +52,13 @@ To run the Babble Android Client, follow these steps:
 - Android Studio
 - Android SDK version 21 or higher (minSdk 21)
 
-## Usage
+## Creating and Deleting Chats
+When a chat is created in our app, the receiver user is not immediately notified. The notification is triggered only when the first message is sent within the chat. This ensures that the receiver is informed at the appropriate time and reduces unnecessary notifications for empty chats.
 
-Once the app is running, you can perform the following actions:
-
-1. Log in with your Babble account or register a new account.
-2. After logging in, you will be directed to the contacts screen, where you can see a list of your chats.
-3. Select a chat from the list to open the single chat screen.
-4. In the single chat screen, you can view and send messages to the chat participants.
-5. Use the add contact screen to search for and add new contacts to your contact list.
-
-## Real-Time Chatting
-
-The Babble Android Client uses WebSocket technology to provide real-time updates for sending messages, creating and deleting chats, and updating profile pictures and display names. Whenever a user performs these actions, the changes will instantly appear on the other side, ensuring seamless and synchronized communication.
-
-Note: For real-time updates to work properly, it is recommended to have multiple users connected using different devices or emulators.
+In terms of chat deletion, if a user decides to delete a chat, it will be removed from their local database and from the server. However, for the other user involved in the chat, the conversation will remain in their local database. The chat will be marked as deleted, indicating that it has been removed by the first user. The other user can choose to delete the chat themselves at a later time if they wish to remove it from their local database as well. This approach allows for individual control over chat deletion while preserving the chat's availability until both users opt to delete it.
 
 ## Conclusion
 
-The Babble Android Client provides a user-friendly interface for accessing and interacting with the Babble chat system on Android devices. With real-time messaging, and an intuitive user experience, users can
+The Babble Android Client provides a user-friendly interface for accessing and interacting with the Babble chat system on Android devices. With real-time messaging, and an intuitive user experience, users can enjoy seamless and synchronized communication with others. 
 
-enjoy seamless and synchronized communication with others. Happy chatting! 😁
+### Happy chatting! 😁
