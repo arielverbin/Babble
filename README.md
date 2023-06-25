@@ -12,23 +12,31 @@ The app consists of the following screens:
 ### Login Screen
 
 The login screen allows users to authenticate and log into their Babble account. Users need to enter their username and password to access the chat system.
-<img src="./login.png" alt="loginScreen" width="77.8" height="160">
+![login](https://github.com/arielverbin/Babble/assets/106393592/65b407ce-0c80-4715-93f9-04eea997dd0e)
+
+
 ### Registration Screen
 
 The registration screen allows new users to create an account on the Babble system. Users need to provide their desired username, password, email, and other required information to register.
-![img_1.png](img_1.png)
 
 ### Contacts Screen
 
 The contacts screen displays a list of chats that the user is a part of. Each chat entry shows the name of the chat and the latest message received or sent in that chat. Users can select a chat from the list to open the single chat screen.
+![chatsList](https://github.com/arielverbin/Babble/assets/106393592/d87929c0-144c-4e5a-ae3f-68a7c1ac3487)
 
 ### Single Chat Screen
 
 The single chat screen displays the messages exchanged in a specific chat. Users can send messages, view received messages, and attach files to their messages. The screen also shows the profile pictures and display names of the chat participants.
+![chat](https://github.com/arielverbin/Babble/assets/106393592/d40916f8-77f0-4cfd-9cb9-6b833df162db)
 
 ### Add Contact Screen
 
 The add contact screen allows users to search for and add new contacts to their contact list. Users can enter the username or email of the person they want to add as a contact.
+
+### Settings
+
+Allows a user to change some settings of the app(like night mode...)
+![settings](https://github.com/arielverbin/Babble/assets/106393592/a56fc4e3-58ac-48f8-ad3e-be45180544ce)
 
 ## Getting Started - Android Client
 
