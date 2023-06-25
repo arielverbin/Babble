@@ -65,7 +65,7 @@ To run the Babble website locally, follow these steps:
 
 To run the Babble Android Client, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/Babble.git`
+1. Clone the repository: `git clone https://github.com/arielverbin/Babble`
 2. Open the project in Android Studio.
 3. Build and run the app on an Android emulator or physical device.
 4. The Babble Android Client should be running, and you can now use the app to log in, register, and chat with other users.
