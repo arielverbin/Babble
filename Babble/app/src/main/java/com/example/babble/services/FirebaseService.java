@@ -78,7 +78,7 @@ public class FirebaseService extends FirebaseMessagingService {
                                 .setContentIntent(pendingIntent)
                                 .setAutoCancel(true);
 
-                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
                         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                             Log.d("Notification", "No permission.");
                         } else {
