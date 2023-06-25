@@ -1,6 +1,6 @@
 # Babble - 4 Assignment - Android Client
 
-The Babble Android Client is an Android application that allows users to chat in real-time using the Babble system. The app provides a seamless and synchronized communication experience, enabling users to send messages, create and delete chats, update their profile picture and display name, and attach files to messages.
+The Babble Android Client is an Android application that allows users to chat in real-time using the Babble system. The app provides a seamless and synchronized communication experience, enabling users to send messages, create and delete chats, update their profile picture and display name.
 ## About the Name 'Babble'
 
 The name "Babble" reflects the concept of talking rapidly and continuously in a foolish, excited, or incomprehensible way. It also resonates with the playful nature of bubbles, which inspired the choice of logo for the website.
@@ -32,7 +32,8 @@ The contacts screen displays a list of chats that the user is a part of. Each ch
 
 ### Single Chat Screen
 
-The single chat screen displays the messages exchanged in a specific chat. Users can send messages, view received messages, and attach files to their messages. The screen also shows the profile pictures and display names of the chat participants.
+The single chat screen displays the messages exchanged in a specific chat. Users can send messages, view received messages.
+The screen also shows the profile pictures and display names of the chat participants.
 
 ![chat](https://github.com/arielverbin/Babble/assets/106393592/d99b7db7-c543-4a2a-b969-f8d8fbca1bc7)
 
@@ -75,17 +76,6 @@ To run the Babble Android Client, follow these steps:
 - Android Studio
 - Android SDK version 21 or higher (minSdk 21)
 
-## Dependencies
-
-The Babble Android Client relies on the following dependencies:
-
-- [Retrofit](https://square.github.io/retrofit/) - For making API requests to the Babble server.
-- [Glide](https://github.com/bumptech/glide) - For loading and displaying profile pictures.
-- [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview) - For displaying lists of chats and messages.
-- [OkHttp](https://square.github.io/okhttp/) - For handling HTTP requests and WebSocket connections.
-
-Make sure to include these dependencies in your project's build.gradle file.
-
 ## Usage
 
 Once the app is running, you can perform the following actions:
@@ -93,7 +83,7 @@ Once the app is running, you can perform the following actions:
 1. Log in with your Babble account or register a new account.
 2. After logging in, you will be directed to the contacts screen, where you can see a list of your chats.
 3. Select a chat from the list to open the single chat screen.
-4. In the single chat screen, you can view and send messages to the chat participants. You can also attach files to your messages.
+4. In the single chat screen, you can view and send messages to the chat participants.
 5. Use the add contact screen to search for and add new contacts to your contact list.
 
 ## Real-Time Chatting
@@ -104,6 +94,6 @@ Note: For real-time updates to work properly, it is recommended to have multiple
 
 ## Conclusion
 
-The Babble Android Client provides a user-friendly interface for accessing and interacting with the Babble chat system on Android devices. With real-time messaging, file attachments, and an intuitive user experience, users can
+The Babble Android Client provides a user-friendly interface for accessing and interacting with the Babble chat system on Android devices. With real-time messaging, and an intuitive user experience, users can
 
 enjoy seamless and synchronized communication with others. Happy chatting! 😁
