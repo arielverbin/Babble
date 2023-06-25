@@ -1,12 +1,12 @@
 package com.example.babble.API;
 
-import com.example.babble.UserDataToSettings;
-import com.example.babble.chats.Message;
-import com.example.babble.chats.ServerMessage;
+import com.example.babble.serverObjects.UserDataToSettings;
+import com.example.babble.entities.Message;
+import com.example.babble.serverObjects.ServerMessage;
 
-import com.example.babble.contacts.Contact;
-import com.example.babble.contacts.ServerContact;
-import com.example.babble.registeration.User;
+import com.example.babble.entities.Contact;
+import com.example.babble.serverObjects.ServerContact;
+import com.example.babble.serverObjects.User;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;

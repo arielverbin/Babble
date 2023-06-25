@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".registeration.RegisterActivity">
+    tools:context=".activities.RegisterActivity">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -75,6 +75,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.715" />
+
+            <EditText
+                android:id="@+id/serverUrlInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:autofillHints="Choose a username."
+                android:ems="10"
+                android:text="@string/BaseUrl"
+                android:hint="@string/serverAddrHint"
+                android:inputType="textUri"
+                android:minHeight="48dp"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/nameInput"
