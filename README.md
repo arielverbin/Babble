@@ -50,21 +50,7 @@ Allows a user to change some settings of the app(like night mode...)
 ![settings](https://github.com/arielverbin/Babble/assets/106393592/f751d33c-9272-4707-b4b5-5e8e09adca69)
 
 
-## Getting Started - Android Client
-
-To run the Babble Android Client, follow these steps:
-
-1. Clone the repository: `git clone https://github.com/Babble.git`
-
-2. Open the project in Android Studio.
-
-3. Build and run the app on an Android emulator or physical device.
-
-4. The Babble Android Client should be running, and you can now use the app to log in, register, and chat with other users.
-
-
-
-## Getting Started - Server & Web Client
+## Getting Started - Server
 
 To run the Babble website locally, follow these steps:
 
@@ -74,10 +60,15 @@ To run the Babble website locally, follow these steps:
 3. Make sure that you have installed all required dependencies: `npm i express cors body-parser mongoose custom-env socket.io`, `npm install firebase`
 4. Run the server using `npm test`, (or `export NODE_ENV=test && node app.js` for macOS/Linux, `set NODE_ENV=test && node app.js` for Windows).
 5. The server should be running.
-6. Open your browser and visit [http://localhost:5001](http://localhost:5001) to access the Babble website.
 
-## WebSockets
-We used WebSocket technology in our application to provide real-time updates for sending messages, or creating/deleting chats. Whenever a user performs these actions, the changes will instantly appear on the other side, ensuring seamless and synchronized communication. However, for updates like changing the profile picture or display name, we made a conscious decision not to notify users immediately. These updates are not considered urgent and do not require immediate notification. Therefore, users can conveniently view the updated information after reopening the application or retrieving their contacts, which may occur periodically. This approach balances the need for timely updates with the consideration of user experience.
+## Getting Started - Android Client
+
+To run the Babble Android Client, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/Babble.git`
+2. Open the project in Android Studio.
+3. Build and run the app on an Android emulator or physical device.
+4. The Babble Android Client should be running, and you can now use the app to log in, register, and chat with other users.
 
 ## Requirements
 
@@ -110,17 +101,6 @@ Once the app is running, you can perform the following actions:
 The Babble Android Client uses WebSocket technology to provide real-time updates for sending messages, creating and deleting chats, and updating profile pictures and display names. Whenever a user performs these actions, the changes will instantly appear on the other side, ensuring seamless and synchronized communication.
 
 Note: For real-time updates to work properly, it is recommended to have multiple users connected using different devices or emulators.
-
-
-## More Notes Real-Time Chatting
-In this project, we have chosen to store the user's information in the localStorage of the browser.
-This decision was made to ensure that users do not get logged out when they refresh the page or reopen the browser.
-By utilizing localStorage, we provide a seamless experience where users can continue their session without interruption.
-
-However, it is important to note that localStorage is shared across all tabs within the same browser.
-While this approach enables persistence, it poses a limitation for experiencing real-time chatting.
-To fully utilize the real-time chatting functionality, it is required to connect to multiple users using different browsers,
-or opening a single incognito tab alongside a single regular tab.
 
 ## Conclusion
 
